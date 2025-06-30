@@ -1,0 +1,63 @@
+.newsLetterCont{
+    background: rgb(74, 40, 136);
+    width: 100%;
+    height: 300px;
+}
+.descriptionCont{
+    color: #fff;
+}
+.descriptionCont>h2{
+    font-weight: 700;
+    font-size: 2.5rem !important;
+}
+
+.descriptionCont>p{
+  color: #ffffff5e;
+  width: 400px;
+}
+.imageCont{
+    width: 450px !important;
+    /* height: 300px !important; */
+}
+
+.imageCont>img{
+    width: 100% !important;
+}
+
+.inputCont{
+    width: 450px !important;
+    position: relative;
+}
+
+.inputCont>*:first-child{
+    font-size: 2rem;
+    color: gray;
+    position: absolute;
+    left: 5px;
+    top: 12px; 
+    /* margin:0 5px; */
+}
+.inputCont>input{
+    padding: 16px 60px;
+    width: 100%;
+    border-radius: 5px;
+    outline: none;
+    border: none;
+   
+    
+}
+
+.inputCont>button{
+    position: absolute;
+    right: 5px;
+    top: 5px;
+    padding: 10px 15px;
+    border: none;
+    background-color: rgba(74, 40, 136, 0.831);
+    color: #fff;
+    border-radius: 5px;
+
+    &:active{
+        transform: scale(0.9);
+    }
+}

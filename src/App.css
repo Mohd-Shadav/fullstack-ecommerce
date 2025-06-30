@@ -1,0 +1,19 @@
+
+
+
+
+.totheTopButton>button{
+    padding: 0.5rem;
+    border-radius: 50%;
+    color: #fff;
+    background-color: rgba(74, 40, 136, 0.831);
+    font-size: 2rem;
+    border: none;
+    outline: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    bottom: 50px;
+    right: 30px;
+}

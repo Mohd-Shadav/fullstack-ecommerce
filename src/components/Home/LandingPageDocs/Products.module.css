@@ -1,0 +1,11 @@
+.productsContainer{
+    display: flex;  /* or use grid */
+    flex-direction: column;
+    overflow-y: auto; /* Enable scrolling */
+    overflow-x: hidden !important;
+    max-height: 100vh; /* Or any suitable height */
+}
+
+.productsContainer::-webkit-scrollbar{
+    appearance: none;
+}

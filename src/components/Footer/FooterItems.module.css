@@ -1,0 +1,38 @@
+.mainCont{
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    gap: 2rem;
+}
+
+.itemDiv{
+    display: flex;
+    flex-direction: column;
+}
+.itemDiv>span{
+    font-size: 1.2rem;
+    color:  rgba(74, 40, 136, 0.831);
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+.itemDiv>ul{
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    padding: 0;
+    margin: 1rem 0;
+    gap: 0.7rem;
+   
+}
+
+.itemDiv>ul>li>*{
+    text-decoration: none;
+    color: rgba(0,0,0,0.6);
+    font-size: 0.8rem;
+    &:hover{
+        color: #252525;
+    }
+}

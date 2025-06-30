@@ -1,0 +1,136 @@
+.linkTodetails{
+
+    text-decoration: none;
+}
+
+.cardCont{
+    width: 240px;
+    cursor: pointer;
+    overflow: hidden;
+    background-color: rgba(128, 128, 128, 0.057);
+    border:0.1px solid rgba(0,0,0,0.1);
+  
+    &:hover{
+        box-shadow: 0.2px 0.2px 1px rgba(0,0,0,0.3),1px 1px 3px rgba(0,0,0,0.3);
+    }
+  
+ 
+}
+
+.imgCont{
+    width: 240px;
+    height: 250px;
+    overflow: hidden;
+}
+.cardCont>.imgCont>img{
+   
+    object-fit: cover;
+   transition: all 0.3s ease-in-out;
+    &:hover{
+        transform:scale(1.1);
+    }
+
+}
+
+.cardDetails{
+    justify-content: start;
+    gap: 5px;
+}
+
+.cardDetails>span:first{
+
+    color: green !important;
+    background-color: aqua;
+
+}
+.discountanddetailcont{
+    position: absolute;
+    margin: 0.5rem 0.6rem;
+    display: flex;
+    justify-content: space-between;
+    width: 100% !important;
+}
+
+.discountDiv{
+    background-color: rgb(43, 190, 249);
+    color:#fff;
+    padding: 5px 10px;
+    height:20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 20px;
+    font-size: small;
+
+}
+.detailaddtocartcont{
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    visibility: hidden;
+    opacity: 0;
+    z-index: 100;
+    transition: visibility 0.3s ease-in-out,opacity 0.3s ease-in-out;
+ 
+}
+
+.detailaddtocartcont>span{
+   
+    padding: 5px;
+    background: #fff;
+    font-size:1.5rem;
+    border-radius: 50%;
+
+    width: 45px;
+    height: 45px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    &:hover{
+        background: rgb(190, 3, 3);
+        color: #fff;
+    }
+
+}
+
+.cardCont:hover .detailaddtocartcont{
+    visibility: visible !important;
+    opacity: 1 !important;
+    position: absolute;
+    right: 20px;
+    top: 20px;
+
+}
+
+
+
+
+
+/* --listings edits for griding sytem----------------- */
+
+.grid-1x1.cardCont{
+    width: 1000px !important;
+    height: 250px;
+    display: flex;
+    flex-direction: row;
+}
+.imgCont.grid-1x1{
+    height: 100% !important;
+}
+.cardDetails.grid-1x1{
+    align-self: center;
+   
+}
+
+
+.grid-3x3.cardCont{
+    width: 300px !important;
+ 
+    
+   
+}
+.imgCont.grid-3x3{
+    width: 100% !important;
+   
+}

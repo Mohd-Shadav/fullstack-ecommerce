@@ -1,0 +1,91 @@
+.imagesColumnContainer{
+    display: flex;
+    flex-direction: column;
+    width: 300px;
+}
+
+
+.mainImageCont{
+    width: 300px;
+    height: 300px !important;
+    background: #000;
+    display: flex;
+    flex-direction: column;
+    border-radius: 10px;
+    overflow: hidden;
+    position: relative;
+    cursor: -webkit-zoom-in;
+    
+}
+
+.mainImageCont>span{
+    z-index: 100;
+    position: absolute;
+    /* top: 10px;
+    left: 10px; */
+}
+.mainImageCont>img{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.allImages{
+
+    width: 400px;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 1rem;
+    margin: 1rem 2rem;
+   
+}
+
+.allImages>div{
+    width: 70px;
+    height: 70px;
+    border: 1px solid rgba(0,0,0,0.3);
+    /* box-sizing: border-box; */
+    padding: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 10px;
+    cursor: pointer;
+    overflow: hidden;
+}
+
+.allImages>div>img{
+    width: 70px;
+    height: 70px;
+     opacity: 0.5;
+}
+
+
+
+.firstImage{
+    border: 1px solid rgba(0, 0, 255, 0.509) !important;
+ 
+}
+.firstImage>img{
+    opacity: 1 !important;
+}
+.secondImage{
+    
+        border: 1px solid rgba(0, 0, 255, 0.509) !important;
+       
+}
+.secondImage>img{
+    opacity: 1 !important;
+}
+
+
+.thirdImage{
+    
+    border: 1px solid rgba(0, 0, 255, 0.509) !important; 
+
+}
+
+.thirdImage img{
+    opacity: 1 !important;
+}

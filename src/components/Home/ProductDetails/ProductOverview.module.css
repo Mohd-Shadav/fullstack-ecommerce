@@ -1,0 +1,39 @@
+.product-overview-main-cont{
+
+    padding: 2rem;
+    background-color: rgb(246, 243, 255);
+    border-radius: 10px;
+}
+
+.btns-cont{
+    display: flex;
+    gap: 2rem;
+    
+}
+.btns-cont>*{
+    border: 1px solid rgba(0,0,0,0.2) !important;
+    border-radius: 20px !important;
+    padding: 5px 15px !important;
+    font-size: small !important;
+    color: #252525 !important;
+}
+
+.descriptionBtn,.additionInfoBtn,.reviewsBtn{
+    background-color: purple !important;
+    color: #fff !important;
+    border: 1px solid rgba(0,0,0,0.2) !important;
+    border-radius: 20px !important;
+    padding: 5px 15px !important;
+    font-size: small;
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    transition: all 0.3s ease-in-out;
+   
+}
+
+.reviewsBtn{
+    display: flex !important;
+    align-items: center !important;
+    gap: 10px !important;
+}

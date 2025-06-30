@@ -1,0 +1,70 @@
+
+.counterCont{
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.counterCont>Button{
+    border: 0.5px solid rgba(0,0,0,0.2);
+    background-color: rgba(0,0,0,0.1);
+    border-radius: 50%;
+    width: 30px !important;
+    height: 30px !important;
+    font-size: 1.1rem !important;
+    color: #252525;
+    min-width: unset !important;
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    /* padding: 15px !important; */
+
+    &:hover{
+        background-color: rgba(0,0,0,0.2);
+    }
+}
+
+.counterCont>Button>*{
+    font-size: 1.1rem !important;
+    color: #595959 !important;
+}
+
+
+.table-head{
+    border-radius: 10px !important;
+}
+
+.table-head tr th{
+    background-color: #59595946 !important;
+    padding:auto 20px !important;
+
+}
+
+.table-head tr th:first-child{
+    border-radius: 10px 0 0 10px !important;
+}
+
+.table-head tr th:last-child{
+    border-radius: 0px 10px 10px 0px !important;
+}
+
+.table-body tr td{
+    padding:20px 5px !important;
+}
+
+.btn-checkout{
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    font-size: 15px !important;
+    background-color: rgb(220, 16, 16) !important;
+    color: #fff !important;
+    &:active{
+        background-color: rgba(128, 0, 128, 0.742) !important;
+    }
+}
+
+.btn-checkout>span>*{
+    font-size: 1.3rem !important;
+    text-align: center !important;
+}

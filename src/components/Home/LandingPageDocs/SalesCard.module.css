@@ -1,0 +1,19 @@
+.saleCard{
+    width: 350px;
+    height: 200px;
+    border-radius: 20px;
+    overflow: hidden;
+   
+
+   
+}
+
+.saleCard>img{
+    width: 100%;
+    height: 100%;
+    border-radius: 20px;
+    transition: all 0.3s ease-in-out;
+    &:hover{
+        transform: scale(1.2);
+    }
+}

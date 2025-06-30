@@ -1,0 +1,14 @@
+.iconDiv{
+    border: 0.5px solid rgba(0,0,0,0.175);
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 10px;
+    color: rgba(74, 40, 136, 0.831);
+    cursor: pointer;
+    &:hover{
+        background-color: rgba(74, 40, 136, 0.831);
+        color: #fff;
+    }
+}

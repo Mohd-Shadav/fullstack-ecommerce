@@ -1,0 +1,8 @@
+.newProductsMainCont{
+    width: 70vw;
+    padding: 0 2rem;
+    /* flex: 1; Allow both to take equal space */
+    /* min-height: 600px;  */
+    /* overflow: hidden; */
+    
+}

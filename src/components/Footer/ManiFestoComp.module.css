@@ -1,0 +1,28 @@
+
+.mainCont{
+    border-bottom: 0.5px solid rgba(0, 0, 0, 0.174);
+    margin-bottom: 2rem;
+
+}
+
+.mainCont>*:last-child{
+    border-right: none !important;
+}
+.AllDivs{
+    padding: 0.5rem 3.5rem;
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    align-items: center;
+    border-right: 0.5px solid rgba(0, 0, 0, 0.174);
+}
+
+.AllDivs>*:first-child{
+    font-size: 1.7rem !important;
+    font-weight: 600;
+}
+.AllDivs>*:last-child{
+    font-size: 0.9rem;
+    font-weight: 700;
+  
+}
