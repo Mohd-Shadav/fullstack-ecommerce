@@ -1,17 +1,21 @@
 import { Rating } from '@mui/material'
-import React from 'react'
+import React, { useEffect } from 'react'
 
-function ProductHeading() {
+function ProductHeading({product}) {
+
+  useEffect(()=>{
+    console.log(product)
+  },[product])
   return (
     <div>
-        <h1>Men Alias-N Regular Fit Spread Collar Shirt
+        <h1>{product?.name}
         </h1>
 
         <div className={`d-flex gap-5 align-items-center`}>
-            <span>Brand: <strong>Rare Rabbit</strong></span>
+            <span>Brand: <strong>{product?.brand}</strong></span>
            <div className="d-flex gap-3">
-           <Rating name="read-only" value={5} readOnly  />
-           <span style={{color:'gray'}}>11 Reviews</span>
+           <Rating name="read-only" value={product?.rating || 0} readOnly />
+           <span style={{color:'gray'}}>{product?.reviews?.length || 0} Reviews</span>
            </div>
         </div>
     </div>

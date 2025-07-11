@@ -11,6 +11,7 @@ import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import ProductCard from '../Home/LandingPageDocs/ProductCard'
 import { MyContext } from '../../store/Context'
+import axios from "axios"
 
 function Listing() {
 
@@ -22,6 +23,7 @@ function Listing() {
     },[])
   const [grid,setGrid] = useState('4x4');
   const [age, setAge] = React.useState(10);
+  const [products,setProducts] = useState([])
 
   const handleChange = (event) => {
     setAge(event.target.value);
@@ -32,7 +34,16 @@ function Listing() {
   }
 
   useEffect(()=>{
-    console.log(grid);
+    
+
+    const getProducts =async ()=>{
+     let res = await axios.get("http://localhost:3000/api/products/get-products");
+     console.log(res.data)
+     setProducts(res.data);
+    }
+  
+    getProducts();
+
   },[grid])
   return (
     <div className={`d-flex mt-3`}>
@@ -68,9 +79,9 @@ function Listing() {
 
                <div className={`${styles['all-content-right-product']} ${styles[`grid-${grid}`]}`}>
                 
-                {Array.from({length:age}).map((item)=>{
+                {products.map((item)=>{
                  return (
-                  <ProductCard classnameProp={`grid-${grid}`} className={`${grid === '1x1' ? styles['grid1x1'] : grid === '3x3' ? styles['grid3x3'] : ''}`}/> 
+                  <ProductCard classnameProp={`grid-${grid}`} className={`${grid === '1x1' ? styles['grid1x1'] : grid === '3x3' ? styles['grid3x3'] : ''}`}  product={item} /> 
                  )
                 })
 

@@ -72,7 +72,7 @@ function App() {
         <Routes>
           <Route path={"/"} element={<Home />} />
           <Route path={"/Listing"} element={<Listing />} />
-          <Route path={"/productdetails"} element={<ProductDetails />} />
+          <Route path={"/productdetails/:productId"} element={<ProductDetails />} />
           <Route path={"/cart"} element={<CartComponent />} />
           <Route path={"/signin"} element={<SignIn />} />
           <Route path={"/signup"} element={<SignUp />} />

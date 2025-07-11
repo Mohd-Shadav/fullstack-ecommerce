@@ -3,7 +3,7 @@ import styles from './ProductDescription.module.css'
 import {  FaMinus, FaPlus, FaRupeeSign, FaShoppingCart } from 'react-icons/fa';
 import Button from '@mui/material/Button';
 import { MdAddShoppingCart } from 'react-icons/md';
-function ProductDescription() {
+function ProductDescription({product}) {
     const [sizes,setSizes] = useState('M');
     const [count,setCount] = useState(1);
   
@@ -18,13 +18,13 @@ function ProductDescription() {
   
           <div className={`d-flex flex-column ${styles['descriptionMainCont']}`}>
                      <div className={`d-flex flex-column ${styles['price-availability-description-Cont']}`}>
-                      <span className={`d-flex`} style={{color:'red'}}><del style={{color:'gray'}}><FaRupeeSign /> 2500</del><FaRupeeSign /> 1500</span>
+                      <span className={`d-flex`} style={{color:'red'}}><del style={{color:'gray'}}><FaRupeeSign /> {product?.originalprice}</del><FaRupeeSign />{product?.discountprice}</span>
 
                       <span>
-                        In Stock
+                        {product?.status}
                       </span>
 
-                      <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Fugiat quam nemo pariatur suscipit laborum! Praesentium nostrum maxime eveniet at odio ipsum dolor delectus facilis debitis doloremque consequatur, ducimus quod est?</p>
+                      <p>{product?.description}</p>
                      </div>
 
                      <div className={`${styles['size-addtocart-buy-cont']}`}>

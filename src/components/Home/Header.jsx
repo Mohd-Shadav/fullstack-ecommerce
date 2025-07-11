@@ -113,7 +113,7 @@ function Header() {
 
 
     const handleScroll = () => {
-  console.log(location);
+
       if(window.scrollY>=100){
         setIsSticky(true);
       }

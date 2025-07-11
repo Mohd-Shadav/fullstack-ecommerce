@@ -6,6 +6,7 @@ import { Link } from "react-router-dom";
 import { FaArrowRight } from "react-icons/fa";
 import Slider from "react-slick";
 import ProductCard from "./ProductCard";
+import axios from 'axios'
 // Import Swiper React components
 import { Swiper, SwiperSlide } from "swiper/react";
 
@@ -23,6 +24,7 @@ function PopularProducts() {
  
      const [scrollerCategory,setScrollerCategory] = useState("");
      const [activeCategory,setActiveCategory] = useState("Fashion")
+     const [products,setProducts] = useState([])
      const listRef = useRef();
 
      let categoryObj = [
@@ -81,9 +83,18 @@ function PopularProducts() {
      }
 
 
-    //  useEffect(()=>{
-        
-    //  },[])
+     useEffect(()=>{
+    
+
+    const getProducts =async ()=>{
+     let res = await axios.get("http://localhost:3000/api/products/get-products");
+     console.log(res.data)
+     setProducts(res.data);
+    }
+  
+    getProducts();
+
+  },[])
 
   return (
     <div
@@ -137,53 +148,13 @@ function PopularProducts() {
           onSwiper={(swiper) => console.log(swiper)}
         >
        
+        {products.map((item)=>(
+             
+        
           <SwiperSlide>
-            <ProductCard />
+            <ProductCard product={item} />
           </SwiperSlide>
-
-          <SwiperSlide>
-            <ProductCard />
-          </SwiperSlide>
-
-          <SwiperSlide>
-            <ProductCard />
-          </SwiperSlide>
-
-          <SwiperSlide>
-            <ProductCard />
-          </SwiperSlide>
-
-          <SwiperSlide>
-            <ProductCard />
-          </SwiperSlide>
-
-          <SwiperSlide>
-            <ProductCard />
-          </SwiperSlide>
-
-          <SwiperSlide>
-            <ProductCard />
-          </SwiperSlide>
-          
-          <SwiperSlide>
-            <ProductCard />
-          </SwiperSlide>
-
-          <SwiperSlide>
-            <ProductCard />
-          </SwiperSlide>
-
-          <SwiperSlide>
-            <ProductCard />
-          </SwiperSlide>
-
-          <SwiperSlide>
-            <ProductCard />
-          </SwiperSlide>
-          
-          <SwiperSlide>
-            <ProductCard />
-          </SwiperSlide>
+        ))}
         </Swiper>
       </div>
     </div>

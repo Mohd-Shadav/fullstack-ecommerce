@@ -16,7 +16,7 @@ const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
-function ProductModal({handleClose,setOpen}) {
+function ProductModal({handleClose,setOpen,product}) {
 
 
 
@@ -46,13 +46,13 @@ function ProductModal({handleClose,setOpen}) {
       <div className={styles['mainContentDialog']}>
            <div className={`d-flex justify-content-between ${styles['headingCont']}`}>
                   <div className={``}>
-                    <h5>Men Alias-N Regular Fit Spread Collar Shirt</h5>
+                    <h5>{product.name}</h5>
                     <div className={`d-flex gap-5`}>
                       <div className={``}>
-                        BRAND: <span>RARE RABBIT</span>
+                        BRAND: <span>{product.brand}</span>
                       </div>
                       <div className={``}>
-                      <Rating name="read-only" value={5} readOnly />
+                      <Rating name="read-only" value={product.rating} readOnly />
                       </div>
                     </div>
                   </div>
@@ -61,9 +61,9 @@ function ProductModal({handleClose,setOpen}) {
 
            <div className={styles['contentDialogBox']}>
                
-               <ImageDisplayer/>
+               <ImageDisplayer thumbnail={product?.images.thumbnail} gallery={product?.images.gallery}/>
 
-                 <ProductDescription/>
+                 <ProductDescription product={product}/>
            </div>
       </div>
       </Dialog>

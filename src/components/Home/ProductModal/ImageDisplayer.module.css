@@ -48,7 +48,8 @@
     /* box-sizing: border-box; */
     padding: 10px;
     display: flex;
-    justify-content: center;
+    justify-content: flex-start;
+
     align-items: center;
     border-radius: 10px;
     cursor: pointer;
@@ -89,3 +90,14 @@
 .thirdImage img{
     opacity: 1 !important;
 }
+
+
+/* .fourthImage{
+    
+    border: 1px solid rgba(0, 0, 255, 0.509) !important; 
+
+}
+
+.fourthImage img{
+    opacity: 1 !important;
+} */

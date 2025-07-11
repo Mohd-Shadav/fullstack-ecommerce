@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import styles from './ProductCard.module.css';
 import { FaIndianRupeeSign, FaRupeeSign, FaRupiahSign } from 'react-icons/fa6'
 import Box from '@mui/material/Box';
@@ -9,9 +9,10 @@ import { CiHeart } from 'react-icons/ci';
 import ProductModal from '../ProductModal/ProductModal';
 import { Link } from 'react-router-dom';
 
-function ProductCard({classnameProp}) {
+function ProductCard({classnameProp,product}) {
     const [value, setValue] = React.useState(2);
      const [open, setOpen] = React.useState(false);
+     const[productId,setProductId] = useState(0);
     
         const handleClickOpen = () => {
        
@@ -24,8 +25,8 @@ function ProductCard({classnameProp}) {
         }
 
      const srcObj = {
-        src1:"https://thumbs.dreamstime.com/b/portrait-young-handsome-man-white-shirt-outdoor-portrait-young-handsome-man-white-shirt-outdoor-nice-appearance-131934608.jpg",
-        src2:"https://i.pinimg.com/564x/9c/8e/27/9c8e278b1c19e23b10a397f98b15a44c.jpg"
+        src1:product?.images?.thumbnail,
+        src2:product?.images?.gallery[0]
      }
      const[srcInp,setSrcInp] = useState(srcObj.src1);
     
@@ -40,13 +41,19 @@ function ProductCard({classnameProp}) {
    
 }
 
+useEffect(()=>{
+
+  console.log(product);
+
+setProductId(product?._id);
+},[])
 
 
   return (
     <>
     <div className={`${styles[classnameProp]} ${styles['main-product-card']}`}>
         <div className={`${styles[classnameProp]} card ${styles["cardCont"]}`} >
-<Link to={'/productdetails'} className={styles['linkToDetails']}>
+<Link to={`/productdetails/${productId}`} className={styles['linkToDetails']}>
 <div className={`${styles[classnameProp]} ${styles['imgCont']}`}>
 <img src={srcInp} className={`card-img-top ${styles['card-cont-img']}`} alt="..." onMouseEnter={changSrcto2} onMouseLeave={changSrcto1}/>
 </div>
@@ -63,20 +70,20 @@ function ProductCard({classnameProp}) {
 
   </div>
   <div className={`${styles[classnameProp]} card-body d-flex flex-column ${styles["cardDetails"]}`}>
-    <h6>Means Alias Screat T-shirt</h6>
-    <span className={``} style={{color:"green",fontWeight:'bold'}}>In-stock</span>
+    <h6>{product?.name || "Loading..."}</h6>
+    <span className={``} style={{color:"green",fontWeight:'bold'}}>{product?.status || "Loading..."}</span>
     <div>
     <Box sx={{ '& > legend': { mt: 4 } }}>
     {/* <Typography component="legend">Read only</Typography> */}
-      <Rating name="read-only" value={value} readOnly />
+      <Rating name="read-only" value={product?.rating || "4"} readOnly />
           </Box>
     </div>
-    <span style={{color:"red",fontWeight:'bold'}}><del style={{color:"gray",fontWeight:'bold',marginRight:'10px'}}><FaIndianRupeeSign/> 2500 </del><FaIndianRupeeSign/>  1500</span>
+    <span style={{color:"red",fontWeight:'bold'}}><del style={{color:"gray",fontWeight:'bold',marginRight:'10px'}}><FaIndianRupeeSign/> {product?.originalprice || "***"} </del><FaIndianRupeeSign/>  {product?.discountprice || "***"}</span>
   </div>
 </div>
 
 {
-  open && <ProductModal handleClose={handleClose} setOpen={setOpen}/>
+  open && <ProductModal handleClose={handleClose} setOpen={setOpen} product={product}/>
 }
     </div>
     </>

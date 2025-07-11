@@ -5,12 +5,12 @@ import AdditionaInfo from './AdditionaInfo'
 import ReviewsComponent from './ReviewsComponent'
 import DescriptionComponent from './DescriptionComponent'
 
-function ProductOverview() {
+function ProductOverview({product}) {
 
     const [btnSelector,setBtnSelector] = useState('Description')
 
     const handleBtnEffect = (e)=>{
-        console.log(e.target.textContent);
+       console.log(product)
         setBtnSelector(e.target.textContent);
     }
   return (
@@ -25,11 +25,11 @@ function ProductOverview() {
         <div className="">
             
           {      btnSelector==='Description'?(
-                    <DescriptionComponent/>
+                    <DescriptionComponent product={product}/>
                 ):btnSelector === 'Additional Info' ? (
-                    <AdditionaInfo/>
+                    <AdditionaInfo product={product}/>
                 ):(
-                    <ReviewsComponent/>
+                    <ReviewsComponent product={product}/>
                 )
             }
            
