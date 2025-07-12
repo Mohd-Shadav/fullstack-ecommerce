@@ -19,8 +19,8 @@
 .searchIcon {
   font-size: 1.5rem;
   position: absolute;
-  right: 5%;
-  top: 10%;
+  right: 3%;
+  top: 30%;
   cursor: pointer;
 }
 
@@ -39,6 +39,12 @@
   text-decoration: none;
   color: #252525;
   font-size: 1.2rem;
+
+  
+}
+.wallet>span{
+    display: flex !important;
+  align-items: center;
 }
 
 .addtoCart {

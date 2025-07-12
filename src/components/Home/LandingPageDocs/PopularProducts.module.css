@@ -1,5 +1,5 @@
 .mainContPopularProduct{
-    width: 70vw;
+    width: 70vw !important;
     padding: 0 2rem;
     overflow-x: hidden;
     /* z-index: -100; */
@@ -7,6 +7,9 @@
     min-height: 500px;
     overflow: visible;
 }
+
+
+
 .HeadingCategoryCont{
     gap: 4rem;
     /* justify-content:center !important; */
@@ -31,6 +34,7 @@
     /* align-items: center; */
     justify-content: center;
     width: 50%;
+    margin-left: auto;
 
     /* gap: 1rem; */
 }
@@ -72,3 +76,5 @@
     /* text-decoration-thickness: 20px !important; */
     text-underline-offset: 7px !important;
 }
+
+

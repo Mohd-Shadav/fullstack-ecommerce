@@ -10,9 +10,37 @@ import 'swiper/css/navigation';
 
 import 'swiper/css/effect-fade';
 import { Navigation } from 'swiper/modules';
+import { useState } from 'react';
+import { useEffect } from 'react';
+import axios from 'axios';
 
 
 function FeaturedProducts() {
+
+
+    const [getFeatured,setGetFeatured] = useState([]);
+
+
+    const getFetauredProducts = async ()=>{
+         
+      try{
+
+        let res = await axios.get("http://localhost:3000/api/products/get-featured-products");
+
+        setGetFeatured(res.data);
+
+      }catch(err){
+        alert("Data was not fetched")
+
+      }
+    }
+
+
+    useEffect(()=>{
+   
+       getFetauredProducts();
+       
+    },[])
   return (
     <div className={`container`}>
        <div className={`d-flex flex-column mt-4`}>
@@ -27,59 +55,19 @@ function FeaturedProducts() {
           modules={[Navigation]}
           navigation={true}
           pagination={{ clickable: true }}
-          // scrollbar={{ draggable: true }}
-          // slidesPerGroup={3}
-          onSlideChange={() => console.log("slide change")}
-          onSwiper={(swiper) => console.log(swiper)}
+     
         >
-       
+        
+        {
+          getFeatured.map((item)=>(
+               
           <SwiperSlide>
-            <ProductCard />
+            <ProductCard product={item} />
           </SwiperSlide>
+          ))
+        }
 
-          <SwiperSlide>
-            <ProductCard />
-          </SwiperSlide>
 
-          <SwiperSlide>
-            <ProductCard />
-          </SwiperSlide>
-
-          <SwiperSlide>
-            <ProductCard />
-          </SwiperSlide>
-
-          <SwiperSlide>
-            <ProductCard />
-          </SwiperSlide>
-
-          <SwiperSlide>
-            <ProductCard />
-          </SwiperSlide>
-
-          <SwiperSlide>
-            <ProductCard />
-          </SwiperSlide>
-          
-          <SwiperSlide>
-            <ProductCard />
-          </SwiperSlide>
-
-          <SwiperSlide>
-            <ProductCard />
-          </SwiperSlide>
-
-          <SwiperSlide>
-            <ProductCard />
-          </SwiperSlide>
-
-          <SwiperSlide>
-            <ProductCard />
-          </SwiperSlide>
-          
-          <SwiperSlide>
-            <ProductCard />
-          </SwiperSlide>
         </Swiper>
       </div>
     </div>

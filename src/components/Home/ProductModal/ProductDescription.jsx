@@ -18,7 +18,7 @@ function ProductDescription({product}) {
   
           <div className={`d-flex flex-column ${styles['descriptionMainCont']}`}>
                      <div className={`d-flex flex-column ${styles['price-availability-description-Cont']}`}>
-                      <span className={`d-flex`} style={{color:'red'}}><del style={{color:'gray'}}><FaRupeeSign /> {product?.originalprice}</del><FaRupeeSign />{product?.discountprice}</span>
+                      <span className={`d-flex`} style={{color:'red',display:"flex",alignItems:"center"}}><del style={{color:'gray',display:"flex",alignItems:"center"}}><FaRupeeSign /> {product?.originalprice}</del><FaRupeeSign />{product?.discountprice}</span>
 
                       <span>
                         {product?.status}

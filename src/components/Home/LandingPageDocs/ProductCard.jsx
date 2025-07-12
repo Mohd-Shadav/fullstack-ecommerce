@@ -43,7 +43,7 @@ function ProductCard({classnameProp,product}) {
 
 useEffect(()=>{
 
-  console.log(product);
+
 
 setProductId(product?._id);
 },[])
@@ -51,41 +51,58 @@ setProductId(product?._id);
 
   return (
     <>
-    <div className={`${styles[classnameProp]} ${styles['main-product-card']}`}>
-        <div className={`${styles[classnameProp]} card ${styles["cardCont"]}`} >
-<Link to={`/productdetails/${productId}`} className={styles['linkToDetails']}>
-<div className={`${styles[classnameProp]} ${styles['imgCont']}`}>
-<img src={srcInp} className={`card-img-top ${styles['card-cont-img']}`} alt="..." onMouseEnter={changSrcto2} onMouseLeave={changSrcto1}/>
-</div>
-</Link>
+<div className={`${styles['main-product-card']} ${classnameProp ? styles[classnameProp] : ''}`}>
+  <div className={`card ${styles['cardCont']} ${classnameProp ? styles[classnameProp] : ''}`}>
+    <Link to={`/productdetails/${productId}`} className={styles['linkToDetails']}>
+      <div className={`${styles['imgCont']} ${classnameProp ? styles[classnameProp] : ''}`}>
+        <img
+          src={srcInp}
+          className={`card-img-top ${styles['card-cont-img']}`}
+          alt="..."
+          onMouseEnter={changSrcto2}
+          onMouseLeave={changSrcto1}
+        />
+      </div>
+    </Link>
 
-  <div className={`${styles['discountanddetailcont']}`}>
-    <div className={`${styles['discountDiv']}`}>
-          <span>10%</span>
-    </div>
-    <div className={`${styles['detailaddtocartcont']}`}>
-        <span onClick={(e)=> {e.preventDefault(); e.stopPropagation(); handleClickOpen();}}><MdOutlineZoomOutMap /></span>
+    <div className={styles['discountanddetailcont']}>
+      <div className={styles['discountDiv']}>
+        <span>10%</span>
+      </div>
+      <div className={styles['detailaddtocartcont']}>
+        <span onClick={(e) => { e.preventDefault(); e.stopPropagation(); handleClickOpen(); }}>
+          <MdOutlineZoomOutMap />
+        </span>
         <span><CiHeart /></span>
+      </div>
     </div>
 
-  </div>
-  <div className={`${styles[classnameProp]} card-body d-flex flex-column ${styles["cardDetails"]}`}>
-    <h6>{product?.name || "Loading..."}</h6>
-    <span className={``} style={{color:"green",fontWeight:'bold'}}>{product?.status || "Loading..."}</span>
-    <div>
-    <Box sx={{ '& > legend': { mt: 4 } }}>
-    {/* <Typography component="legend">Read only</Typography> */}
-      <Rating name="read-only" value={product?.rating || "4"} readOnly />
-          </Box>
+    <div className={`card-body d-flex flex-column ${styles['cardDetails']} ${classnameProp ? styles[classnameProp] : ''}`}>
+      <h6>{product?.name || "Loading..."}</h6>
+      <span style={{ color: "green", fontWeight: 'bold' }}>{product?.status || "Loading..."}</span>
+      <div>
+        <Box sx={{ '& > legend': { mt: 4 } }}>
+          <Rating name="read-only" value={product?.rating || 4} readOnly />
+        </Box>
+      </div>
+      <span style={{ color: "red", fontWeight: 'bold', display: "flex", alignItems: "center" }}>
+        <del style={{ color: "gray", fontWeight: 'bold', marginRight: '10px', display: "flex", alignItems: "center" }}>
+          <FaIndianRupeeSign /> {product?.originalprice || "***"}
+        </del>
+        <FaIndianRupeeSign /> {product?.discountprice || "***"}
+      </span>
     </div>
-    <span style={{color:"red",fontWeight:'bold'}}><del style={{color:"gray",fontWeight:'bold',marginRight:'10px'}}><FaIndianRupeeSign/> {product?.originalprice || "***"} </del><FaIndianRupeeSign/>  {product?.discountprice || "***"}</span>
   </div>
+
+  {open && (
+    <ProductModal
+      handleClose={handleClose}
+      setOpen={setOpen}
+      product={product}
+    />
+  )}
 </div>
 
-{
-  open && <ProductModal handleClose={handleClose} setOpen={setOpen} product={product}/>
-}
-    </div>
     </>
   )
 }

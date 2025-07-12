@@ -2,6 +2,8 @@ import React, { useContext, useEffect } from 'react'
 import styles from './SignIn.module.css'
 import { MyContext } from '../../store/Context'
 import { Link } from 'react-router-dom';
+import { WavesDemo } from '../ui/waves-demo';
+import { Waves } from '../ui/wave-background';
 
 function SignIn() {
 
@@ -13,12 +15,15 @@ function SignIn() {
   },[])
 
   return (
+
     <div className={`${styles['main-cont-login']}`}>
 
+  <div style={{ position: 'absolute', inset: 0, zIndex: 0 }}>
+        <Waves className="w-full h-full" />
+      </div>
 
 
-
-<div className={styles['form-container']}>
+<div className={styles['form-container']} style={{zIndex:10}}>
 	<p className={styles['title']}>Login</p>
 	<form className={styles['form']}>
 		<div className={styles["input-group"]}>
@@ -61,8 +66,10 @@ function SignIn() {
 	</p>
 </div>
 
+
        
     </div>
+
   )
 }
 

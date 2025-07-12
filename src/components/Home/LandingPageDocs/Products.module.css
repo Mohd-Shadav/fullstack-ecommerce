@@ -1,6 +1,9 @@
 .productsContainer{
     display: flex;  /* or use grid */
     flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    width: 70vw !important;
     overflow-y: auto; /* Enable scrolling */
     overflow-x: hidden !important;
     max-height: 100vh; /* Or any suitable height */

@@ -18,7 +18,7 @@ import { EffectCoverflow, Navigation, Pagination } from 'swiper/modules';
 
 function Products() {
   return (
-    <div className='container mt-5 '>
+    <div className='container-fluid mt-5 d-flex justify-center'>
 
           <div className="d-flex">
             <Advertisement/>

@@ -57,21 +57,29 @@ function ProductDetails() {
         <h3>Related Product</h3>
         <div className="">
         <Swiper
-          spaceBetween={10}
+          spaceBetween={20}
           slidesPerView={5}
           modules={[Navigation]}
           navigation={true}
           pagination={{ clickable: true }}
           // scrollbar={{ draggable: true }}
           // slidesPerGroup={3}
-        
+      
+            breakpoints={{
+      320: { slidesPerView: 1 },
+      600: { slidesPerView: 2 },
+      900: { slidesPerView: 3 },
+      1200: { slidesPerView: 4 },
+    }}
           
         >
 
           {relatedProducts.map((item)=>(
-              <SwiperSlide>
-            <ProductCard product={item}/>
-          </SwiperSlide>
+           <SwiperSlide>
+  
+    <ProductCard product={item} />
+
+</SwiperSlide>
           ))}
        
         

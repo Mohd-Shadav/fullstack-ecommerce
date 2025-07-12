@@ -142,10 +142,7 @@ function PopularProducts() {
           modules={[Navigation]}
           navigation={true}
           pagination={{ clickable: true }}
-          // scrollbar={{ draggable: true }}
-          // slidesPerGroup={3}
-          onSlideChange={() => console.log("slide change")}
-          onSwiper={(swiper) => console.log(swiper)}
+  
         >
        
         {products.map((item)=>(
