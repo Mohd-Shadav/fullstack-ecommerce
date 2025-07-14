@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import styles from './Sidebar.module.css'
 import Radio from '@mui/material/Radio';
 import RadioGroup from '@mui/material/RadioGroup';
@@ -17,10 +17,32 @@ import 'swiper/css/navigation';
 import { Navigation } from 'swiper/modules';
 import ProductCard from '../Home/LandingPageDocs/ProductCard';
 import Advertisement from '../Home/LandingPageDocs/Advertisement';
+import axios from 'axios';
 
 
 function Sidebar() {
     const [value, setValue] = useState([100, 60000]);
+   const [getFeaturedProducts,setGetFeaturedProducts] = useState([]);
+
+    useEffect(()=>{
+      const getFeaturedProducts =async ()=>{
+
+        try{
+          const res = await axios.get("http://localhost:3000/api/products/get-featured-products");
+          setGetFeaturedProducts(res.data);
+
+
+
+        }catch(err){
+          alert("Error to fetch Featured Products at SideBar...")
+        }
+
+
+      }
+      getFeaturedProducts()
+
+    },[])
+
   return (
     <div className={`${styles['sidebar-main-container']}`}>
         <div className={`${styles['product-category-container']}`}>
@@ -77,18 +99,14 @@ function Sidebar() {
         <div className={`${styles['swiperCont']} mt-2`}>
           <h6>FEATURED PRODUCTS</h6>
         <Swiper navigation={true} modules={[Navigation]} className="mySwiper mt-4">
-        <SwiperSlide>
-         <ProductCard/>
+       
+        {getFeaturedProducts.map((item)=>(
+          <SwiperSlide>
+        <ProductCard product={item}/>
         </SwiperSlide>
-        <SwiperSlide>
-        <ProductCard/>
-        </SwiperSlide>
-        <SwiperSlide>
-           <ProductCard/>
-        </SwiperSlide>
-        <SwiperSlide>
-        <ProductCard/>
-        </SwiperSlide>
+        ))
+
+        }
       </Swiper>
          
         </div>

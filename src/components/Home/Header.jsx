@@ -1,4 +1,5 @@
 import React, { useContext, useEffect, useRef, useState } from "react";
+import {useDispatch} from 'react-redux'
 import { Link, useLocation } from "react-router-dom";
 import Logo from "/images/Logo.png";
 import { FaRupeeSign } from "react-icons/fa";
@@ -13,6 +14,8 @@ import { RiArrowDropDownLine } from "react-icons/ri";
 import { Button,Avatar } from "@mui/material"
 import CountryDropDown from "./CountryDropDown";
 import { CountryDropDownContext, MyContext } from "../../store/Context";
+import axios from "axios";
+import { getCategorySlice } from "../../store/reduxSlice";
 
 function Header() {
 
@@ -22,93 +25,17 @@ function Header() {
   const [isDropDown,setIsDropDown] = useState("");
   const [isSliderAllCategory,setIsSliderAllCategory] = useState("");
   const [allCategoryDropper,setAllCategoryDropper] = useState(false);
+  const [categoryObj,setCategoryObj] = useState([])
   const [isSticky, setIsSticky] = useState(false);
   const subNavRef = useRef(null);
   const location = useLocation();
 
 
-  let categoryObj = [
-    {
-      src:"fashionLogo",
-      name:'Fashion'
-    },
-    {
-      src:"electronicsLogo",
-      name:'Electronics'
-    }
-    ,
-    {
-      src:"bagLogo",
-      name:'Bags'
-    }
-    ,
-    {
-      src:"footwearLogo",
-      name:'Footwear'
-    }
-    ,
-    {
-      src:"groceriesLogo",
-      name:'Groceries'
-    }
-    ,
-    {
-      src:"beautyLogo",
-      name:'Beauty'
-    }
-    ,
-    {
-      src:"wellnessLogo",
-      name:'Wellness'
-    }
-    
+  const dispatch = useDispatch()
 
-  ]
 
-  let allCategoryObj = [
-    {
-      src:"fashionLogo",
-      name:'Fashion'
-    },
-    {
-      src:"electronicsLogo",
-      name:'Electronics'
-    }
-    ,
-    {
-      src:"bagLogo",
-      name:'Bags'
-    }
-    ,
-    {
-      src:"footwearLogo",
-      name:'Footwear'
-    }
-    ,
-    {
-      src:"groceriesLogo",
-      name:'Groceries'
-    }
-    ,
-    {
-      src:"beautyLogo",
-      name:'Beauty'
-    }
-    ,
-    {
-      src:"wellnessLogo",
-      name:'Wellness'
-    },{
-     src:"jewelleryLogo",
-     name:"Jewellery"
-    },
-    {
-      src:'sportsLogo',
-      name:'Sports'
-    }
-    
 
-  ]
+ 
 
 
 
@@ -141,6 +68,8 @@ function Header() {
 }
 
 
+
+
 const handleAllCategoriesDropDown = ()=>{
   setAllCategoryDropper(!allCategoryDropper);
 }
@@ -150,6 +79,33 @@ const handleSliderCategories = (item)=>{
 
   setIsSliderAllCategory(prev => prev === item ? "" : item);
 }
+
+
+const handleSettingCategory = (name)=>{
+     
+      dispatch(getCategorySlice(name));
+}
+
+useEffect(()=>{
+
+  const getCategories = async(req,res)=>{
+      try{
+
+        let res = await axios.get("http://localhost:3000/api/category/get-categories")
+
+        setCategoryObj(res.data)
+
+        
+      }catch(err)
+      {
+
+        alert("Categories were not fetched...")
+
+      }
+  }
+  getCategories()
+
+},[])
 
   
   return (
@@ -214,9 +170,9 @@ const handleSliderCategories = (item)=>{
    
         <div className={`${styles['allcategory-dropper']} ${allCategoryDropper? styles['activeDropperAll']:"" }`} onMouseLeave={handleMouseLeave}>
         <ul>
-         {allCategoryObj.map((item)=>{
+         {categoryObj.map((item)=>{
           return (
-            <li onMouseEnter={()=>handleSliderCategories(item.name)}><Link to={'/Listing'}><Button><span><img src={`/images/header/${item.src}.png`} alt="" /></span> {item.name}</Button></Link></li>
+            <li onMouseEnter={()=>handleSliderCategories(item.categoryname)}><Link to={'/Listing'} onClick={()=>handleSettingCategory(item.categoryname)}><Button><span><img src={item.categoryicon} alt="" /></span> {item.categoryname}</Button></Link></li>
           )
          })
 
@@ -252,25 +208,25 @@ const handleSliderCategories = (item)=>{
        {categoryObj.map((item,index)=>{
         return (
           <div key={index} className={styles['categoryDivMainCont']} >
-          <div  className={styles['categoryDivs']} onMouseEnter={()=>handleMouseEnter(item.name)}>
-          <span><img src={`/images/header/${item.src}.png`} alt={`${item.name} Logo`} /></span>
-          <Link to={'/Listing'}>{item.name.toUpperCase()}</Link>
+          <div  className={styles['categoryDivs']} onMouseEnter={()=>handleMouseEnter(item.categoryname)}>
+          <span><img src={item.categoryicon} alt={`${item.categoryname} Logo`} /></span>
+          <Link to={'/Listing'} onClick={()=>handleSettingCategory(item.categoryname)}>{item.categoryname.toUpperCase()}</Link>
          
         </div>
        
         
 
-           {item.name.toLowerCase()==='electronics' ? (
-               <div style={{visibility:isDropDown===item.name ? 'visible':'hidden'}} className={`${styles['sub-menu']} ${styles[item.name]} shadow`}>
+           {item.categoryname.toLowerCase()==='electronics' ? (
+               <div style={{visibility:isDropDown===item.name ? 'visible':'hidden'}} className={`${styles['sub-menu']} ${styles[item.categoryname]} shadow`}>
                <Link><Button style={{width:'100%',textAlign:'start',display:'flex',justifyContent:'flex-start'}}>Laptops</Button></Link>
                <Link><Button style={{width:'100%',textAlign:'start',display:'flex',justifyContent:'flex-start'}}>Smart Watches</Button></Link>
                <Link><Button style={{width:'100%',textAlign:'start',display:'flex',justifyContent:'flex-start'}}>Cameras</Button></Link>
               
               </div>
-           ): (["groceries", "beauty", "wellness"].includes(item.name.toLowerCase()) 
+           ): (["groceries", "beauty", "wellness"].includes(item.categoryname.toLowerCase()) 
            ? <></>
            : (
-             <div style={{visibility:isDropDown===item.name ? 'visible':'hidden',}} className={`${styles['sub-menu']} ${styles[item.name]} shadow`}>
+             <div style={{visibility:isDropDown===item.categoryname ? 'visible':'hidden',}} className={`${styles['sub-menu']} ${styles[item.categoryname]} shadow`}>
                <Link><Button style={{ width: '100%', textAlign: 'start', display: 'flex', justifyContent: 'flex-start' }}>Men</Button></Link>
                <Link><Button style={{ width: '100%', textAlign: 'start', display: 'flex', justifyContent: 'flex-start' }}>Women</Button></Link>
              </div>

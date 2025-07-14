@@ -26,48 +26,49 @@ function PopularProducts() {
      const [activeCategory,setActiveCategory] = useState("Fashion")
      const [products,setProducts] = useState([])
      const listRef = useRef();
+     const [categoryObj,setCategoryObj] = useState([])
 
-     let categoryObj = [
-      {
-        src:"fashionLogo",
-        name:'Fashion'
-      },
-      {
-        src:"electronicsLogo",
-        name:'Electronics'
-      }
-      ,
-      {
-        src:"bagLogo",
-        name:'Bags'
-      }
-      ,
-      {
-        src:"footwearLogo",
-        name:'Footwear'
-      }
-      ,
-      {
-        src:"groceriesLogo",
-        name:'Groceries'
-      }
-      ,
-      {
-        src:"beautyLogo",
-        name:'Beauty'
-      }
-      ,
-      {
-        src:"wellnessLogo",
-        name:'Wellness'
-      }
-      ,
-      {
-        src:"jewelleryLogo",
-        name:'Jewellery'
-      }
+    //  let categoryObj = [
+    //   {
+    //     src:"fashionLogo",
+    //     name:'Fashion'
+    //   },
+    //   {
+    //     src:"electronicsLogo",
+    //     name:'Electronics'
+    //   }
+    //   ,
+    //   {
+    //     src:"bagLogo",
+    //     name:'Bags'
+    //   }
+    //   ,
+    //   {
+    //     src:"footwearLogo",
+    //     name:'Footwear'
+    //   }
+    //   ,
+    //   {
+    //     src:"groceriesLogo",
+    //     name:'Groceries'
+    //   }
+    //   ,
+    //   {
+    //     src:"beautyLogo",
+    //     name:'Beauty'
+    //   }
+    //   ,
+    //   {
+    //     src:"wellnessLogo",
+    //     name:'Wellness'
+    //   }
+    //   ,
+    //   {
+    //     src:"jewelleryLogo",
+    //     name:'Jewellery'
+    //   }
   
-    ]
+    // ]
   
 
      const handleRightScroller = ()=>{
@@ -86,11 +87,27 @@ function PopularProducts() {
      useEffect(()=>{
     
 
+      const getCategory =async ()=>{
+        try{
+          const res = await axios.get("http://localhost:3000/api/category/get-categories");
+          setCategoryObj(res.data);
+
+        }catch(err)
+        {
+          alert("Failed to get categories at popular products...")
+        }
+
+      }
+
+    
+
     const getProducts =async ()=>{
-     let res = await axios.get("http://localhost:3000/api/products/get-products");
+     let res = await axios.get(`http://localhost:3000/api/products/get-popular-products/${activeCategory}`);
      console.log(res.data)
      setProducts(res.data);
     }
+
+    getCategory();
   
     getProducts();
 
@@ -118,8 +135,8 @@ function PopularProducts() {
           {
             categoryObj.map((item)=>{
               return (
-                <li  onClick={()=>handleCategoryActive(item.name)} > 
-                <Link className={`${activeCategory===item.name ? styles["activeCat"]:""}`}>{item.name}</Link>
+                <li  onClick={()=>handleCategoryActive(item.categoryname)} > 
+                <Link className={`${activeCategory===item.categoryname ? styles["activeCat"]:""}`}>{["Beauty & Personal Care", "Health & Wellness"].includes(item.categoryname) ? item.categoryname.split('').splice(0,5).join('')+"...": item.categoryname}</Link>
               </li>
               )
             })

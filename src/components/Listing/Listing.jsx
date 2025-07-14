@@ -12,11 +12,15 @@ import Select from '@mui/material/Select';
 import ProductCard from '../Home/LandingPageDocs/ProductCard'
 import { MyContext } from '../../store/Context'
 import axios from "axios"
+import { useSelector } from 'react-redux'
+import { getCategorySlice } from '../../store/reduxSlice'
+import NoResultFound from '../../../../E-Commerce Admin Panel/Frontend/src/pages/NoResultFound/NoResultFound'
 
 function Listing() {
 
 
     const context = useContext(MyContext);
+    const category = useSelector((state)=>state.category.value)
   
     useEffect(()=>{
     context.setIsHeaderFooter(true);
@@ -37,14 +41,16 @@ function Listing() {
     
 
     const getProducts =async ()=>{
-     let res = await axios.get("http://localhost:3000/api/products/get-products");
+     let res = await axios.get(`http://localhost:3000/api/products/category/${category}`);
      console.log(res.data)
      setProducts(res.data);
     }
   
     getProducts();
 
-  },[grid])
+  
+
+  },[grid,category])
   return (
     <div className={`d-flex mt-3`}>
 
@@ -79,13 +85,22 @@ function Listing() {
 
                <div className={`${styles['all-content-right-product']} ${styles[`grid-${grid}`]}`}>
                 
-                {products.map((item)=>{
-                 return (
-                  <ProductCard classnameProp={`grid-${grid}`} className={`${grid === '1x1' ? styles['grid1x1'] : grid === '3x3' ? styles['grid3x3'] : ''}`}  product={item} /> 
-                 )
-                })
+              {products.length>0 ? (
+                products.map((item) => (
+  <ProductCard
+    key={item._id || item.id}  // use a unique key here
+    classnameProp={`grid-${grid}`}
+    className={`${grid === '1x1' ? styles['grid1x1'] : grid === '3x3' ? styles['grid3x3'] : ''}`}
+    product={item}
+  />
+))):(
+  <div className="" style={{width:"100%",display:"flex",justifyContent:"center",alignItems:"center"}}>
+    <NoResultFound/>
+  </div>
 
-                }
+)
+              }
+
 
                </div>
             </div>
