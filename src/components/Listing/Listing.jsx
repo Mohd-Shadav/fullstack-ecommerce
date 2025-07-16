@@ -14,7 +14,7 @@ import { MyContext } from '../../store/Context'
 import axios from "axios"
 import { useSelector } from 'react-redux'
 import { getCategorySlice } from '../../store/reduxSlice'
-import NoResultFound from '../../../../E-Commerce Admin Panel/Frontend/src/pages/NoResultFound/NoResultFound'
+import NoResultFound from '../NoResultFound/NoResultFound'
 
 function Listing() {
 

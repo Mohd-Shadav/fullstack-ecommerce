@@ -27,16 +27,25 @@
 .imgCont{
     width: 100%;
     height: 250px;
+    min-height: 250px;
     overflow: hidden;
 }
 .cardCont>.imgCont>img{
    
     object-fit: cover;
+  
    transition: all 0.3s ease-in-out;
     &:hover{
         transform:scale(1.1);
     }
 
+}
+.card-cont-img{
+width: 100%;
+height: 100%;
+    object-fit: cover;
+    
+  
 }
 
 .cardDetails{

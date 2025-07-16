@@ -28,47 +28,7 @@ function PopularProducts() {
      const listRef = useRef();
      const [categoryObj,setCategoryObj] = useState([])
 
-    //  let categoryObj = [
-    //   {
-    //     src:"fashionLogo",
-    //     name:'Fashion'
-    //   },
-    //   {
-    //     src:"electronicsLogo",
-    //     name:'Electronics'
-    //   }
-    //   ,
-    //   {
-    //     src:"bagLogo",
-    //     name:'Bags'
-    //   }
-    //   ,
-    //   {
-    //     src:"footwearLogo",
-    //     name:'Footwear'
-    //   }
-    //   ,
-    //   {
-    //     src:"groceriesLogo",
-    //     name:'Groceries'
-    //   }
-    //   ,
-    //   {
-    //     src:"beautyLogo",
-    //     name:'Beauty'
-    //   }
-    //   ,
-    //   {
-    //     src:"wellnessLogo",
-    //     name:'Wellness'
-    //   }
-    //   ,
-    //   {
-    //     src:"jewelleryLogo",
-    //     name:'Jewellery'
-    //   }
-  
-    // ]
+   
   
 
      const handleRightScroller = ()=>{
@@ -103,7 +63,7 @@ function PopularProducts() {
 
     const getProducts =async ()=>{
      let res = await axios.get(`http://localhost:3000/api/products/get-popular-products/${activeCategory}`);
-     console.log(res.data)
+    
      setProducts(res.data);
     }
 
@@ -111,7 +71,7 @@ function PopularProducts() {
   
     getProducts();
 
-  },[])
+  },[activeCategory])
 
   return (
     <div
@@ -161,14 +121,11 @@ function PopularProducts() {
           pagination={{ clickable: true }}
   
         >
-       
-        {products.map((item)=>(
-             
-        
-          <SwiperSlide>
-            <ProductCard product={item} />
-          </SwiperSlide>
-        ))}
+       {products.map((item) => (
+  <SwiperSlide key={item._id || item.id}>
+    <ProductCard product={item} />
+  </SwiperSlide>
+))}
         </Swiper>
       </div>
     </div>
