@@ -42,7 +42,7 @@ function Listing() {
 
     const getProducts =async ()=>{
      let res = await axios.get(`http://localhost:3000/api/products/category/${category}`);
-     console.log(res.data)
+    
      setProducts(res.data);
     }
   

@@ -250,7 +250,7 @@ function Header() {
           </div>
         </div>
 
-        {categoryObj.slice(0,6).map((item, index) => {
+        {categoryObj.slice(0, 6).map((item, index) => {
           return (
             <div key={index} className={styles["categoryDivMainCont"]}>
               <div
@@ -267,7 +267,7 @@ function Header() {
                   to={"/Listing"}
                   onClick={() => handleSettingCategory(item.categoryname)}
                 >
-                  {item.categoryname.toUpperCase()}
+                  {item.categoryname.toUpperCase()} 
                 </Link>
               </div>
 
