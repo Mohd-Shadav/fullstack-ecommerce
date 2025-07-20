@@ -2,10 +2,56 @@ import React, { useContext, useEffect } from 'react'
 import styles from './SignUp.module.css'
 import { MyContext } from '../../store/Context'
 import { Link } from 'react-router-dom';
+import { useState } from 'react';
+import axios from 'axios'
 
 function SignUp() {
 
    const context = useContext(MyContext);
+
+   const [signupCredentials,setSignupCredentials] = useState({name:"",email:"",mobile:0,password:""});
+
+   const [confirmPassword,setConfirmPassword] = useState("")
+
+
+   const handleChange = (e)=>{
+
+    let {name,value} = e.target;
+    setSignupCredentials((prev)=>({
+        ...prev,
+        [name] : value
+    }))
+   }
+
+   const handleSubmit = async (e)=>{
+
+    e.preventDefault();
+    if(signupCredentials.password === confirmPassword)
+    {
+
+    
+
+    try{
+
+        await axios.post("http://localhost:3000/api/users/create-user",signupCredentials,{
+            withCredentials:true,
+            headers:{
+                "Content-type":"application/json"
+            }
+        })
+
+        alert("User Created Successfully...");
+
+    }catch(err){
+        alert("Something Went wrong..")
+    }
+}
+else{
+    alert("Confirm password should be same as password...")
+}
+
+   }
+
   useEffect(()=>{
      
     context.setIsHeaderFooter(false);
@@ -20,34 +66,34 @@ function SignUp() {
 
 <div className={styles['form-container']}>
     <p className={styles['title']}>Create Account</p>
-    <form className={styles['form']}>
+    <form className={styles['form']} onSubmit={handleSubmit}>
     <div className={`d-flex gap-3 ${styles['name-mobile-cont']}`}>
     <div className={styles["input-group"]}>
             <label for="username">Username</label>
-            <input type="text" name="username" id="username" placeholder="" required/>
+            <input type="text" name="name" id="name" placeholder="" required onChange={handleChange} value={signupCredentials.name}/>
         </div>
 
         <div className={styles["input-group"]}>
             <label for="mobileno">Mobile No.</label>
-            <input type="number" name="mobile" id="" placeholder="" minLength={10} maxLength={10} required/>
+            <input type="number" name="mobile" id="" placeholder="" minLength={10} maxLength={10} required onChange={handleChange} value={signupCredentials.mobile}/>
         </div>
     </div>
 
         
         <div className={styles["input-group"]}>
             <label for="email">Email</label>
-            <input type="email" name="email" id="" placeholder="" required/>
+            <input type="email" name="email" id="" placeholder="" required onChange={handleChange} value={signupCredentials.email}/>
         </div>
      <div className="">
    <div className={styles['password-confirm-cont']}>
    <div className={styles["input-group"]}>
             <label for="password">Password</label>
-            <input type="password" name="password" id="password" placeholder="" required/>
+            <input type="password" name="password" id="password" placeholder="" required onChange={handleChange} value={signupCredentials.password}/>
           
         </div>
         <div className={styles["input-group"]}>
             <label for="password">Confirm Password</label>
-            <input type="password" name="confirmpassword" id="password" placeholder="" required/>
+            <input type="password" name="confirmpassword" id="password" placeholder="" required value={confirmPassword}  onChange={(e)=>setConfirmPassword(e.target.value)} />
           
         </div>
    </div>

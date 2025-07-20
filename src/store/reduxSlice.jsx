@@ -12,7 +12,23 @@ const categorySlice = createSlice({
     }
 })
 
+const loggedInOutSlice = createSlice({
+    name:"loggedInOutSlice",
+    initialState:{
+        value:false
+    },
+    reducers:{
+        login:(state)=>{
+            state.value = true
+        },
+        logout:(state)=>{
+            state.value = false
+        }
+    }
+})
+
 
 export const {getCategorySlice} = categorySlice.actions;
-export default categorySlice.reducer;
-// export const categoryS = categorySlice.reducer
+export const {login,logout} = loggedInOutSlice.actions;
+export const catgorySlicia =  categorySlice.reducer;
+export const loggedInOutSlicia = loggedInOutSlice.reducer
