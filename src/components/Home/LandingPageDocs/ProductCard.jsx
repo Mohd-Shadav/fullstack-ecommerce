@@ -8,11 +8,14 @@ import { MdOutlineZoomOutMap } from 'react-icons/md';
 import { CiHeart } from 'react-icons/ci';
 import ProductModal from '../ProductModal/ProductModal';
 import { Link } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import axios from 'axios';
 
 function ProductCard({classnameProp,product}) {
     const [value, setValue] = React.useState(2);
      const [open, setOpen] = React.useState(false);
      const[productId,setProductId] = useState(0);
+     const user = useSelector((state)=>state.userData.value)
     
         const handleClickOpen = () => {
        
@@ -41,8 +44,23 @@ function ProductCard({classnameProp,product}) {
    
 }
 
-useEffect(()=>{
+     const handleCart = async (id)=>{
+          try{
 
+          
+            let res = await axios.post(`http://localhost:3000/api/users/addtocart/${user._id}/${id}`)
+            console.log(res.data.cart);
+            alert(`${res.data.product.name} Added Into Cart Successfully...`)
+
+
+          }catch(err){
+            alert("Item was not added...")
+
+          }
+        }
+
+useEffect(()=>{
+  
 
 
 setProductId(product?._id);
@@ -73,7 +91,7 @@ setProductId(product?._id);
         <span onClick={(e) => { e.preventDefault(); e.stopPropagation(); handleClickOpen(); }}>
           <MdOutlineZoomOutMap />
         </span>
-        <span><CiHeart /></span>
+        <span onClick={()=>handleCart(product?._id)}> <CiHeart /> </span>
       </div>
     </div>
 

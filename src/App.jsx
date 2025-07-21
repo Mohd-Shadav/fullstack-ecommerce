@@ -15,6 +15,9 @@ import ProductDetails from "./components/Home/ProductDetails/ProductDetails";
 import CartComponent from "./components/Home/AddToCart/CartComponent";
 import SignIn from "./components/Auth/SignIn";
 import SignUp from "./components/Auth/SignUp";
+import { useDispatch } from "react-redux";
+import { login, userAllData } from "./store/reduxSlice";
+import MyProfile from "./components/client/MyProfile";
 
 function App() {
   const URL = "https://countriesnow.space/api/v0.1/countries";
@@ -23,6 +26,7 @@ function App() {
 
   const [isHeaderFooter,setIsHeaderFooter] = useState(true);
   const [isLoggedIn,setIsLoggedIn] = useState(false);
+  const dispatch = useDispatch();
 
   const getCountries = async () => {
     try {
@@ -45,6 +49,26 @@ function App() {
   };
 
   useEffect(() => {
+    async function fetchUserFromCookie() {
+      try {
+        const res = await axios.get('http://localhost:3000/api/users/auth', {
+          withCredentials: true
+        });
+
+     
+        dispatch(login());
+        localStorage.setItem("userID",res.data._id);
+        dispatch(userAllData(res.data))
+      } catch (err) {
+        console.log("User not logged in or invalid token.");
+      }
+    }
+
+    fetchUserFromCookie();
+  }, []);
+
+
+  useEffect(() => {
     const handleScroll = () => {
       if (window.scrollY > 500) {
         setScroller(true);
@@ -52,6 +76,9 @@ function App() {
         setScroller(false);
       }
     };
+
+
+
 
     window.addEventListener("scroll", handleScroll);
 
@@ -76,6 +103,7 @@ function App() {
           <Route path={"/cart"} element={<CartComponent />} />
           <Route path={"/signin"} element={<SignIn />} />
           <Route path={"/signup"} element={<SignUp />} />
+          <Route path={"/myprofile"} element = {<MyProfile/>}/>
         </Routes>
      {
       isHeaderFooter && (<>

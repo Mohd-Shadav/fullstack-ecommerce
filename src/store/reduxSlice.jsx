@@ -28,7 +28,23 @@ const loggedInOutSlice = createSlice({
 })
 
 
+const userData = createSlice({
+    name:"userData",
+    initialState:{
+        value:{}
+    },
+    reducers:{
+        userAllData:(state,action)=>{
+
+
+            state.value = action.payload
+        }
+    }
+})
+
 export const {getCategorySlice} = categorySlice.actions;
 export const {login,logout} = loggedInOutSlice.actions;
-export const catgorySlicia =  categorySlice.reducer;
+export const {userAllData} = userData.actions;
+export const categorySlicia =  categorySlice.reducer;
 export const loggedInOutSlicia = loggedInOutSlice.reducer
+export const userDataSlicia = userData.reducer

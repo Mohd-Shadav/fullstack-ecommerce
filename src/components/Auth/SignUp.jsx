@@ -1,9 +1,11 @@
 import React, { useContext, useEffect } from 'react'
 import styles from './SignUp.module.css'
 import { MyContext } from '../../store/Context'
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import axios from 'axios'
+import {useDispatch} from 'react-redux'
+import { login, userAllData } from '../../store/reduxSlice';
 
 function SignUp() {
 
@@ -12,6 +14,9 @@ function SignUp() {
    const [signupCredentials,setSignupCredentials] = useState({name:"",email:"",mobile:0,password:""});
 
    const [confirmPassword,setConfirmPassword] = useState("")
+
+   const dispatch = useDispatch();
+   const navigate = useNavigate();
 
 
    const handleChange = (e)=>{
@@ -33,14 +38,22 @@ function SignUp() {
 
     try{
 
-        await axios.post("http://localhost:3000/api/users/create-user",signupCredentials,{
+        let res = await axios.post("http://localhost:3000/api/users/create-user",signupCredentials,{
             withCredentials:true,
             headers:{
                 "Content-type":"application/json"
             }
         })
 
+        console.log(res.data)
+
+        dispatch(login());
+        dispatch(userAllData(res.data));
+        navigate('/');
+        
+
         alert("User Created Successfully...");
+
 
     }catch(err){
         alert("Something Went wrong..")

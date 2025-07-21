@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useRef, useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Link, useLocation } from "react-router-dom";
 import Logo from "/images/Logo.png";
 import { FaRupeeSign } from "react-icons/fa";
@@ -16,6 +16,7 @@ import { CountryDropDownContext, MyContext } from "../../store/Context";
 import axios from "axios";
 import { getCategorySlice } from "../../store/reduxSlice";
 
+
 function Header() {
   const context = useContext(CountryDropDownContext);
   const myCont = useContext(MyContext);
@@ -25,7 +26,9 @@ function Header() {
   const [categoryObj, setCategoryObj] = useState([]);
   const [isSticky, setIsSticky] = useState(false);
   const subNavRef = useRef(null);
-  const location = useLocation();
+  const loggedIn = useSelector((state)=>state.isLoggedIn.value)
+  const userData = useSelector((state)=>state.userData.value)
+
 
   const dispatch = useDispatch();
 
@@ -72,8 +75,12 @@ function Header() {
         alert("Categories were not fetched...");
       }
     };
+
+  
     getCategories();
-  }, []);
+
+  
+  }, [loggedIn]);
 
   return (
     <div className={styles["header"]}>
@@ -102,8 +109,8 @@ function Header() {
           </div>
         </div>
         <div className={styles["userCredentialCont"]}>
-          {myCont.isLoggedIn ? (
-            <Link to={"/signin"} className={styles["userDiv"]}>
+          {loggedIn ? (
+            <Link to={"/myprofile"} className={styles["userDiv"]}>
               <Avatar
                 alt="Remy Sharp"
                 src="https://thumbs.dreamstime.com/b/customer-support-service-agent-headset-flat-vector-icon-design-designs-153069456.jpg"
@@ -119,7 +126,7 @@ function Header() {
           <Link to={"/"} className={styles["wallet"]}>
             <span>
               <FaRupeeSign />
-              1800.00
+              {userData.wallet > 0 ? userData.wallet : "00.00"}
             </span>
           </Link>
           <Link to={"/cart"}>

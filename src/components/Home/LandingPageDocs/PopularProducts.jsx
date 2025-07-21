@@ -65,8 +65,10 @@ function PopularProducts() {
      let res = await axios.get(`http://localhost:3000/api/products/get-popular-products/${activeCategory}`);
     
      setProducts(res.data);
+    
     }
 
+   
     getCategory();
   
     getProducts();
