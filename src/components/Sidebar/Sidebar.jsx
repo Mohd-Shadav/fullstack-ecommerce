@@ -18,11 +18,14 @@ import { Navigation } from 'swiper/modules';
 import ProductCard from '../Home/LandingPageDocs/ProductCard';
 import Advertisement from '../Home/LandingPageDocs/Advertisement';
 import axios from 'axios';
+import {useSelector} from 'react-redux'
 
 
 function Sidebar() {
     const [value, setValue] = useState([100, 60000]);
+       const category = useSelector((state)=>state.category.value)
    const [getFeaturedProducts,setGetFeaturedProducts] = useState([]);
+      const [subCategoriesList,setSubCategoriesList] = useState([]);
 
     useEffect(()=>{
       const getFeaturedProducts =async ()=>{
@@ -39,9 +42,21 @@ function Sidebar() {
 
 
       }
+
+       const fetchSubCategories = async ()=>{
+
+        let getCategoryData = await axios.get(`http://localhost:3000/api/category/category-name/${category}`);
+       
+        let res = await axios.get(`http://localhost:3000/api/category/${getCategoryData.data._id}/sub-category`);
+        setSubCategoriesList(res.data);
+   
+
+    }
       getFeaturedProducts()
 
-    },[])
+      fetchSubCategories();
+
+    },[category])
 
   return (
     <div className={`${styles['sidebar-main-container']}`}>
@@ -55,15 +70,12 @@ function Sidebar() {
         defaultValue="men"
         name="radio-buttons-group"
       >
-        <FormControlLabel className={`${styles['radio-btns']}`} value="men" control={<Radio />} label="Men" />
-        <FormControlLabel className={`${styles['radio-btns']}`} value="women" control={<Radio />} label="Women" />
-        <FormControlLabel className={`${styles['radio-btns']}`} value="laptops" control={<Radio />} label="Laptops" />
-        <FormControlLabel className={`${styles['radio-btns']}`} value="smartwatches" control={<Radio />} label="Smart Watch Accessories" />
-        <FormControlLabel className={`${styles['radio-btns']}`} value="cameras" control={<Radio />} label="Cameras" />
-        <FormControlLabel className={`${styles['radio-btns']}`} value="menbags" control={<Radio />} label="Men Bags" />
-        <FormControlLabel className={`${styles['radio-btns']}`} value="womenbags" control={<Radio />} label="Women Bags" /> 
-        <FormControlLabel className={`${styles['radio-btns']}`} value="menfootwear" control={<Radio />} label="Man Footwear" />
-        <FormControlLabel className={`${styles['radio-btns']}`} value="womenfootwear" control={<Radio />} label="Women Footwear" />
+     {subCategoriesList.map((item)=>{
+      return (
+           <FormControlLabel className={`${styles['radio-btns']}`} value={item} control={<Radio />} label={item} />
+      )
+     })}
+       
       </RadioGroup>
     </FormControl>
             </div>

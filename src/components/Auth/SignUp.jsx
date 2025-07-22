@@ -11,7 +11,7 @@ function SignUp() {
 
    const context = useContext(MyContext);
 
-   const [signupCredentials,setSignupCredentials] = useState({name:"",email:"",mobile:0,password:""});
+   const [signupCredentials,setSignupCredentials] = useState({name:"",email:"",mobile:"",password:""});
 
    const [confirmPassword,setConfirmPassword] = useState("")
 
@@ -33,26 +33,41 @@ function SignUp() {
     e.preventDefault();
     if(signupCredentials.password === confirmPassword)
     {
+        const mobileAsNumber = Number(signupCredentials.mobile);
 
+        if(isNaN(mobileAsNumber) || signupCredentials.mobile.length !== 10)
+        {
+            alert("Enter Valid Mobile Number...")
+            return;
+        }
     
-
     try{
+const updatedCredentials = {
+  ...signupCredentials,
+  mobile: mobileAsNumber
+};
 
-        let res = await axios.post("http://localhost:3000/api/users/create-user",signupCredentials,{
+        let res = await axios.post("http://localhost:3000/api/users/create-user",updatedCredentials,{
             withCredentials:true,
             headers:{
                 "Content-type":"application/json"
             }
         })
 
-        console.log(res.data)
+     
 
-        dispatch(login());
-        dispatch(userAllData(res.data));
-        navigate('/');
+ if(res.status === 200)
+ {
+           dispatch(login());
+           dispatch(userAllData(res.data));
+           navigate('/');
         
 
-        alert("User Created Successfully...");
+             alert("User Created Successfully...");
+ }
+ else{
+    alert(res.message);
+ }
 
 
     }catch(err){
@@ -88,7 +103,7 @@ else{
 
         <div className={styles["input-group"]}>
             <label for="mobileno">Mobile No.</label>
-            <input type="number" name="mobile" id="" placeholder="" minLength={10} maxLength={10} required onChange={handleChange} value={signupCredentials.mobile}/>
+            <input type="text" pattern="^[0-9]{10}$" name="mobile" id="" placeholder="" minLength={10} maxLength={10} required onChange={handleChange} value={signupCredentials.mobile}/>
         </div>
     </div>
 

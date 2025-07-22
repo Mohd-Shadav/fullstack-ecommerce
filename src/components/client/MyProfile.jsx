@@ -14,8 +14,11 @@ import EmailIcon from "@mui/icons-material/Email";
 import PhoneIcon from "@mui/icons-material/Phone";
 import { green } from '@mui/material/colors';
 import { useTheme } from '@mui/material/styles';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import CartComponent from '../Home/AddToCart/CartComponent';
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
+import { logout, userAllData } from '../../store/reduxSlice';
 
 // TabPanel Component
 function TabPanel(props) {
@@ -58,11 +61,36 @@ export default function UserDashboard() {
   const theme = useTheme();
   const [value, setValue] = React.useState(0);
   const handleChange = (event, newValue) => setValue(newValue);
-  const user = useSelector((state)=>state.userData.value)
+
+  const [user,setUser] = React.useState([]);
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   // Placeholder modals control
   const [openEditModal, setOpenEditModal] = React.useState(false);
   const [openAddressModal, setOpenAddressModal] = React.useState(false);
+
+
+  const handleLogout =async ()=>{
+    try{
+
+      let res = await axios.get('http://localhost:3000/api/users/logout',{
+        withCredentials:true
+      });
+      console.log(res)
+
+      localStorage.setItem('userID',"");
+
+      alert("Logged Out Successfully...")
+      navigate('/')
+      dispatch(logout());
+
+
+    }catch(err)
+    {
+      alert("Something went wrong...")
+    }
+  }
 
   // Example User Data
 //   const user = {
@@ -95,6 +123,25 @@ export default function UserDashboard() {
 //     ],
 //   };
 
+
+React.useEffect(()=>{
+
+  const fetchUser = async () => {
+    try {
+      const res = await axios.get("http://localhost:3000/api/users/auth", {
+        withCredentials: true,
+      });
+      setUser(res.data);
+      dispatch(userAllData(res.data));
+    } catch (err) {
+      console.error("Error fetching user:", err);
+      alert("Failed to load user data.");
+    }
+  };
+
+  fetchUser();
+
+},[])
 
 
   const fabs = [
@@ -132,6 +179,7 @@ export default function UserDashboard() {
           <Tab label="Cart Items" {...a11yProps(1)} />
           <Tab label="My Orders" {...a11yProps(2)} />
           <Tab label="Addresses" {...a11yProps(3)} />
+          <Button color='error' onClick={handleLogout}>Logout</Button>
         </Tabs>
       </AppBar>
 

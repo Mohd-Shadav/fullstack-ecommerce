@@ -21,6 +21,7 @@ function Listing() {
 
     const context = useContext(MyContext);
     const category = useSelector((state)=>state.category.value)
+ 
   
     useEffect(()=>{
     context.setIsHeaderFooter(true);
@@ -46,7 +47,11 @@ function Listing() {
      setProducts(res.data);
     }
   
+
+   
     getProducts();
+
+ 
 
   
 

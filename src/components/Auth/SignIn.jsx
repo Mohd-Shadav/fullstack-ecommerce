@@ -1,13 +1,67 @@
-import React, { useContext, useEffect } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import styles from './SignIn.module.css'
 import { MyContext } from '../../store/Context'
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { WavesDemo } from '../ui/waves-demo';
 import { Waves } from '../ui/wave-background';
+import axios from 'axios';
+import { Password } from '@mui/icons-material';
+import { useDispatch } from 'react-redux';
+import { login } from '../../store/reduxSlice';
 
 function SignIn() {
 
    const context = useContext(MyContext);
+   const dispatch = useDispatch()
+   const navigate = useNavigate();
+   const [formData,setFormData] = useState({
+	email:"",
+	password:""
+   })
+
+   const handleChange = (e)=>{
+
+	let {name,value} = e.target;
+
+	setFormData((prev)=>({
+		...prev,
+		[name]:value
+	}))
+
+   }
+
+const handleLogin = async(e)=>{
+	e.preventDefault();
+
+	try{
+
+		let res = await axios.post('http://localhost:3000/api/users/login',formData,{
+			withCredentials:true,
+			headers:{
+				"Content-Type":"application/json"
+			}
+		});
+     
+	    if(res.status === 200)
+		{
+		
+		alert("Logged In Successfully");
+		localStorage.setItem("userID",res.data.user._id)
+		
+		dispatch(login());
+		navigate('/')
+		}
+		
+	
+		
+
+	}catch(err)
+	{
+		alert("Invalid Credentials...")
+	}
+
+}
+
   useEffect(()=>{
      
     context.setIsHeaderFooter(false);
@@ -25,14 +79,14 @@ function SignIn() {
 
 <div className={styles['form-container']} style={{zIndex:10}}>
 	<p className={styles['title']}>Login</p>
-	<form className={styles['form']}>
+	<form className={styles['form']} onSubmit={handleLogin}>
 		<div className={styles["input-group"]}>
-			<label for="username">Username</label>
-			<input type="text" name="username" id="username" placeholder=""/>
+			<label for="email">Email</label>
+			<input type="email" name="email" id="email" placeholder="" onChange={handleChange} value={formData.email}/>
 		</div>
 		<div className={styles["input-group"]}>
 			<label for="password">Password</label>
-			<input type="password" name="password" id="password" placeholder=""/>
+			<input type="password" name="password" id="password" placeholder="" onChange={handleChange} value={formData.password}/>
 			<div className={styles["forgot"]}>
 				<a rel="noopener noreferrer" href="#">Forgot Password ?</a>
 			</div>
