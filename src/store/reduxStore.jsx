@@ -1,11 +1,12 @@
 import { configureStore } from "@reduxjs/toolkit"
 
-import {categorySlicia, loggedInOutSlicia, userDataSlicia } from './reduxSlice'
+import {categorySlicia, filterDataSlicia, loggedInOutSlicia, userDataSlicia } from './reduxSlice'
 
 export const store = configureStore({
   reducer:{
       category : categorySlicia,
       isLoggedIn : loggedInOutSlicia,
-      userData : userDataSlicia
+      userData : userDataSlicia,
+      filterDataSlice:filterDataSlicia
   }
 })

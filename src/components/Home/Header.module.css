@@ -132,7 +132,7 @@
   flex-direction: column;
   justify-content: flex-start;
   position: absolute;
-  top: 140%;
+  top: 100%;
   left: 0px;
   color: #252525;
   width: 150px;
@@ -143,6 +143,7 @@
   opacity: 0;
   visibility: hidden;
   transform: translateY(20px);
+ 
   transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
   
 }

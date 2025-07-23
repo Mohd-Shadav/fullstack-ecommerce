@@ -10,7 +10,7 @@ import { HiOutlineShoppingBag } from "react-icons/hi2";
 import { IoIosMenu } from "react-icons/io";
 import { RiArrowDropDownLine } from "react-icons/ri";
 
-import { Button, Avatar } from "@mui/material";
+import { Button, Avatar, Badge } from "@mui/material";
 import CountryDropDown from "./CountryDropDown";
 import { CountryDropDownContext, MyContext } from "../../store/Context";
 import axios from "axios";
@@ -26,8 +26,11 @@ function Header() {
   const [categoryObj, setCategoryObj] = useState([]);
   const [isSticky, setIsSticky] = useState(false);
   const subNavRef = useRef(null);
+  const [subCategories,setSubCategories] = useState([]);
   const loggedIn = useSelector((state)=>state.isLoggedIn.value)
   const userData = useSelector((state)=>state.userData.value)
+  const updationUser = useSelector((state)=>state.userData.isUpdate);
+  const [cartItems,setCartItems] = useState(userData?.cart?.length);
 
 
   const dispatch = useDispatch();
@@ -42,8 +45,24 @@ function Header() {
 
   window.addEventListener("scroll", handleScroll);
 
-  const handleMouseEnter = (item) => {
+  const handleMouseEnter =async (item) => {
     setIsDropDown(item);
+    try{
+     
+
+      let getCategory = await axios.get(`http://localhost:3000/api/category/category-name/${item}`);
+
+      let res = await axios.get(`http://localhost:3000/api/category/${getCategory.data._id}/sub-category`);
+
+      setSubCategories(res.data)
+
+      console.log(res.data)
+
+
+    }catch(err)
+    {
+      alert("Failed to load subcategories")
+    }
   };
 
   const handleMouseLeave = () => {
@@ -63,6 +82,29 @@ function Header() {
     dispatch(getCategorySlice(name));
   };
 
+
+  useEffect(()=>{
+
+
+     const getUsers = async () => {
+    try {
+      let res = await axios.get(
+        `http://localhost:3000/api/users/get-user/${userData._id}`
+      );
+
+      setCartItems(res.data.cart);
+      
+    } catch (err) {
+      alert("user not fetched...");
+    }
+  };
+
+  getUsers()
+
+    
+  
+      
+  },[updationUser])
   useEffect(() => {
     const getCategories = async (req, res) => {
       try {
@@ -131,7 +173,10 @@ function Header() {
           </Link>
           <Link to={"/cart"}>
             <span className={styles["addtoCart"]}>
+              <Badge badgeContent={cartItems?.length} showZero color="primary" >
               <HiOutlineShoppingBag />
+              </Badge>
+
             </span>
           </Link>
         </div>
@@ -257,12 +302,18 @@ function Header() {
           </div>
         </div>
 
+
+
+        {/* Horizontal Categories..... */}
+
         {categoryObj.slice(0, 6).map((item, index) => {
           return (
-            <div key={index} className={styles["categoryDivMainCont"]}>
+            <div key={index} className={styles["categoryDivMainCont"]} 
+   onMouseEnter={() => handleMouseEnter(item.categoryname)}
+  onMouseLeave={handleMouseLeave}>
               <div
                 className={styles["categoryDivs"]}
-                onMouseEnter={() => handleMouseEnter(item.categoryname)}
+               
               >
                 <span>
                   <img
@@ -278,16 +329,21 @@ function Header() {
                 </Link>
               </div>
 
-              {item.categoryname.toLowerCase() === "electronics" ? (
+             
                 <div
-                  style={{
-                    visibility: isDropDown === item.name ? "visible" : "hidden",
-                  }}
+                 style={{
+  visibility: isDropDown === item.categoryname ? "visible" : "hidden",
+  opacity: isDropDown === item.categoryname ? 1 : 0,
+  transform: isDropDown === item.categoryname ? "translateY(0)" : "translateY(20px)",
+  transition: "opacity 0.3s, transform 0.3s",
+}}
                   className={`${styles["sub-menu"]} ${
                     styles[item.categoryname]
                   } shadow`}
                 >
-                  <Link>
+
+                  {subCategories.map((elem)=> {
+                    return (  <Link to={'/Listing'}>
                     <Button
                       style={{
                         width: "100%",
@@ -296,74 +352,15 @@ function Header() {
                         justifyContent: "flex-start",
                       }}
                     >
-                      Laptops
+                    {elem}
                     </Button>
                   </Link>
-                  <Link>
-                    <Button
-                      style={{
-                        width: "100%",
-                        textAlign: "start",
-                        display: "flex",
-                        justifyContent: "flex-start",
-                      }}
-                    >
-                      Smart Watches
-                    </Button>
-                  </Link>
-                  <Link>
-                    <Button
-                      style={{
-                        width: "100%",
-                        textAlign: "start",
-                        display: "flex",
-                        justifyContent: "flex-start",
-                      }}
-                    >
-                      Cameras
-                    </Button>
-                  </Link>
+
+                    )
+                  })}
+               
                 </div>
-              ) : ["groceries", "beauty", "wellness"].includes(
-                  item.categoryname.toLowerCase()
-                ) ? (
-                <></>
-              ) : (
-                <div
-                  style={{
-                    visibility:
-                      isDropDown === item.categoryname ? "visible" : "hidden",
-                  }}
-                  className={`${styles["sub-menu"]} ${
-                    styles[item.categoryname]
-                  } shadow`}
-                >
-                  <Link>
-                    <Button
-                      style={{
-                        width: "100%",
-                        textAlign: "start",
-                        display: "flex",
-                        justifyContent: "flex-start",
-                      }}
-                    >
-                      Men
-                    </Button>
-                  </Link>
-                  <Link>
-                    <Button
-                      style={{
-                        width: "100%",
-                        textAlign: "start",
-                        display: "flex",
-                        justifyContent: "flex-start",
-                      }}
-                    >
-                      Women
-                    </Button>
-                  </Link>
-                </div>
-              )}
+           
             </div>
           );
         })}

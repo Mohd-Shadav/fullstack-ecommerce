@@ -8,14 +8,17 @@ import { MdOutlineZoomOutMap } from 'react-icons/md';
 import { CiHeart } from 'react-icons/ci';
 import ProductModal from '../ProductModal/ProductModal';
 import { Link } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import axios from 'axios';
+import { getUserDataUpdationTrigger } from '../../../store/reduxSlice';
 
 function ProductCard({classnameProp,product}) {
     const [value, setValue] = React.useState(2);
      const [open, setOpen] = React.useState(false);
      const[productId,setProductId] = useState(0);
      const user = useSelector((state)=>state.userData.value)
+
+     const dispatch = useDispatch();
     
         const handleClickOpen = () => {
        
@@ -49,8 +52,9 @@ function ProductCard({classnameProp,product}) {
 
           
             let res = await axios.post(`http://localhost:3000/api/users/addtocart/${user._id}/${id}`)
-            console.log(res.data.cart);
+           
             alert(`${res.data.product.name} Added Into Cart Successfully...`)
+            dispatch(getUserDataUpdationTrigger());
 
 
           }catch(err){
@@ -100,7 +104,9 @@ setProductId(product?._id);
       <span style={{ color: "green", fontWeight: 'bold' }}>{product?.status || "Loading..."}</span>
       <div>
         <Box sx={{ '& > legend': { mt: 4 } }}>
-          <Rating name="read-only" value={product?.rating || 4} readOnly />
+         <div className="" style={{display:"flex",alignItems:"center",gap:"10px"}}>
+           <Rating name="read-only" precision={0.1} value={product?.rating || 4} readOnly /> ({product?.rating})
+         </div>
         </Box>
       </div>
       <span style={{ color: "red", fontWeight: 'bold', display: "flex", alignItems: "center" }}>

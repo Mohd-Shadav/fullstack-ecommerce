@@ -18,7 +18,8 @@ import { Navigation } from 'swiper/modules';
 import ProductCard from '../Home/LandingPageDocs/ProductCard';
 import Advertisement from '../Home/LandingPageDocs/Advertisement';
 import axios from 'axios';
-import {useSelector} from 'react-redux'
+import {useDispatch, useSelector} from 'react-redux'
+import { getFilterData, getFilterDataUpdationTrigger } from '../../store/reduxSlice';
 
 
 function Sidebar() {
@@ -26,6 +27,44 @@ function Sidebar() {
        const category = useSelector((state)=>state.category.value)
    const [getFeaturedProducts,setGetFeaturedProducts] = useState([]);
       const [subCategoriesList,setSubCategoriesList] = useState([]);
+      const dispatch = useDispatch();
+
+     
+const [filterData,setFilterData] = useState({
+  subcategory:"",
+  pricerange:[],
+  rating:3.5
+})
+
+   const handleFilterization = (e) => {
+  
+  const { name, value } = e.target;
+
+  if(name=== "pricerange")
+  {
+    setValue(value);
+   
+  }
+
+    setFilterData((prev)=>({
+      ...prev,
+      [name]:value
+    }))
+
+};
+
+useEffect(()=>{
+
+
+
+
+ 
+
+  dispatch(getFilterData(filterData));
+  dispatch(getFilterDataUpdationTrigger());
+
+
+},[filterData])
 
     useEffect(()=>{
       const getFeaturedProducts =async ()=>{
@@ -70,9 +109,10 @@ function Sidebar() {
         defaultValue="men"
         name="radio-buttons-group"
       >
+      <FormControlLabel className={`${styles['radio-btns']}`} value={""} control={<Radio />} label={"All"} name={"subcategory"} onChange={handleFilterization}/>
      {subCategoriesList.map((item)=>{
       return (
-           <FormControlLabel className={`${styles['radio-btns']}`} value={item} control={<Radio />} label={item} />
+           <FormControlLabel className={`${styles['radio-btns']}`} value={item} control={<Radio />} label={item} name={"subcategory"} onChange={handleFilterization}/>
       )
      })}
        
@@ -80,31 +120,42 @@ function Sidebar() {
     </FormControl>
             </div>
         </div>
+       
 
         <div className={`${styles['filter-price']}`}>
             <h6>FILTER BY PRICE</h6>
-            <div className="mt-2 w-full">
+            <div className="mt-2">
                 <RangeSlider  value={value} 
-        onInput={setValue} 
+      
         min={100} 
         max={60000} 
-        step={100}  
+        step={100} 
+        name={"pricerange"} 
+      
+
+         onInput={(val) => handleFilterization({ target: { name: 'pricerange', value: val } })}
+
         />
-        <div className={`mt-2 d-flex gap-5`}>
-            <span style={{flex:'0 0 50%'}}>From : <strong style={{color:'rgba(0,0,0,0.5'}}>{value[0]}</strong></span>
-            <span style={{flex:'0 0 50%'}}>To : <strong style={{color:'rgba(0,0,0,0.5'}}>{value[1]}</strong></span>
+        <div className={`mt-2 d-flex gap-5 `}>
+            <span style={{flex:'0 0 50%',flexShrink:0}}>From : <strong style={{color:'rgba(0,0,0,0.5'}}>{value[0]}</strong></span>
+            <span style={{flex:'0 0 40%',flexShrink:0}}>To : <strong style={{color:'rgba(0,0,0,0.5'}}>{value[1]}</strong></span>
         </div>
             </div>
         </div>
 
         <div className={`${styles['filter-rating']}`}>
         <h6>FILTER BY RATING</h6>
-        <div className={`${styles['rating-div-container']} d-flex flex-column gap-2`}>
-        <Rating name="read-only" value={5} readOnly sx={{ cursor: "pointer" }} />
-        <Rating name="read-only" value={4} readOnly />
-        <Rating name="read-only" value={3} readOnly />
-        <Rating name="read-only" value={2} readOnly />
-        <Rating name="read-only" value={1} readOnly />
+        <div className={`${styles['rating-div-container']} d-flex flex-column gap-2`} >
+        <Rating name="rating" value={filterData.rating}   precision={0.1}   onChange={(event, newValue) => {
+    handleFilterization({ target: { name: "rating", value: newValue } });
+  }}
+   sx={{
+   
+    cursor: 'pointer'
+  }}
+
+/>
+      
         </div>
         </div>
 

@@ -8,12 +8,16 @@ import { MyContext } from "../../../store/Context";
 import axios from "axios";
 import EmptyCartMessage from "../../NoResultFound/EmptyCartMessage";
 import { Link } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { getUserDataUpdationTrigger } from "../../../store/reduxSlice";
 
 
 function CartComponent() {
   const context = useContext(MyContext);
 
   const [userid, setUserId] = useState(localStorage.getItem("userID"));
+
+  const dispatch = useDispatch();
 
   const [cartItems, setCartItems] = useState();
 
@@ -61,6 +65,7 @@ const handleRemoveItem = async(id)=>{
     let res = await axios.delete(`http://localhost:3000/api/users/cart/removeitem/${userid}/${id}`)
     getUsers();
     setHandleRendering((prev)=>!prev)
+    dispatch(getUserDataUpdationTrigger());
 
   }catch(err)
   {
@@ -75,6 +80,7 @@ const handleRemoveItem = async(id)=>{
       );
 
       setCartItems(res.data.cart);
+      
     } catch (err) {
       alert("user not fetched...");
     }

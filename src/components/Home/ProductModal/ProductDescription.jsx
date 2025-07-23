@@ -3,9 +3,13 @@ import styles from './ProductDescription.module.css'
 import {  FaMinus, FaPlus, FaRupeeSign, FaShoppingCart } from 'react-icons/fa';
 import Button from '@mui/material/Button';
 import { MdAddShoppingCart } from 'react-icons/md';
+import axios from 'axios';
+import { useDispatch } from 'react-redux';
+import { getUserDataUpdationTrigger } from '../../../store/reduxSlice';
 function ProductDescription({product}) {
     const [sizes,setSizes] = useState('M');
     const [count,setCount] = useState(1);
+    const dispatch = useDispatch()
   
   
     const fashionSizes = [
@@ -14,6 +18,25 @@ function ProductDescription({product}) {
     const handleSizes = (size)=>{
         setSizes(size);
     }
+
+
+     const handleCart = async (id)=>{
+          try{
+
+            let userid = localStorage.getItem("userID")
+
+          
+            let res = await axios.post(`http://localhost:3000/api/users/addtocart/${userid}/${product?._id}`)
+          
+            alert(`${res.data.product.name} Added Into Cart Successfully...`)
+            dispatch(getUserDataUpdationTrigger());
+
+
+          }catch(err){
+            alert("Item was not added...")
+
+          }
+        }
   return (
   
           <div className={`d-flex flex-column ${styles['descriptionMainCont']}`}>
@@ -47,7 +70,7 @@ function ProductDescription({product}) {
                         <Button onClick={()=>{setCount(prev=>prev+1)}}><FaPlus /></Button>
                       </div>
                       <div className={`d-flex ${styles['addCartSubCont']}`}>
-                        <Button><span><MdAddShoppingCart /></span> Add To Cart</Button>
+                        <Button onClick={()=>handleCart(product?._id)}><span><MdAddShoppingCart /></span> Add To Cart</Button>
                       </div>
                       </div>
                       <div className={`${styles['buyBtnCont']}`}>
