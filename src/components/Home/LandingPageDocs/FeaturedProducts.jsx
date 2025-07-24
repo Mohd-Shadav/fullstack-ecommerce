@@ -59,10 +59,10 @@ function FeaturedProducts() {
         >
         
         {
-          getFeatured.map((item)=>(
+          getFeatured.map((item,idx)=>(
                
-          <SwiperSlide>
-            <ProductCard product={item} />
+          <SwiperSlide key={idx}>
+            <ProductCard key={idx} product={item} />
           </SwiperSlide>
           ))
         }

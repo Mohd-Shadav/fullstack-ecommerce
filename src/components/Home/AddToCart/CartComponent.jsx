@@ -26,6 +26,7 @@ function CartComponent() {
 
   const [shippingAmount,setShippingAmount] = useState(0)
   const [handleRendering,setHandleRendering] = useState(false)
+  
 
 
 
@@ -88,7 +89,11 @@ const handleRemoveItem = async(id)=>{
 
   useEffect(() => {
     context.setIsHeaderFooter(true);
-    getUsers();
+
+
+    if(localStorage.getItem("userID"))
+    {
+   getUsers();
       if (cartItems && cartItems.length > 0) {
     const total = cartItems.reduce((acc, item) => {
       return acc + item.quantity * item.product.discountprice;
@@ -99,6 +104,11 @@ const handleRemoveItem = async(id)=>{
 
   setShippingAmount(total>500?0:50)
   }
+    }else{
+      
+    }
+
+ 
   }, [cartItems,handleRendering]);
 
   return (

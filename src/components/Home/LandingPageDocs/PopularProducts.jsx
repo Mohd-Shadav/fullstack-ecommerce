@@ -95,9 +95,9 @@ function PopularProducts() {
         }
           <ul ref={listRef} className={`d-flex ${styles['listCategory']}`}>
           {
-            categoryObj.map((item)=>{
+            categoryObj.map((item,idx)=>{
               return (
-                <li  onClick={()=>handleCategoryActive(item.categoryname)} > 
+                <li key={idx}  onClick={()=>handleCategoryActive(item.categoryname)} > 
                 <Link className={`${activeCategory===item.categoryname ? styles["activeCat"]:""}`}>{["Beauty & Personal Care", "Health & Wellness"].includes(item.categoryname) ? item.categoryname.split('').splice(0,5).join('')+"...": item.categoryname}</Link>
               </li>
               )

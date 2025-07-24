@@ -37,9 +37,9 @@ function NewProducts() {
    </div>
 
    <div className={`d-flex flex-wrap gap-7 mx-2 w-full`}>
-       {getNew.map((item)=>{
+       {getNew.map((item,idx)=>{
           return (
-            <ProductCard  product={item}/>
+            <ProductCard key={idx}  product={item}/>
           )
        })}
    </div>

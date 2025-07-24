@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import Logo from "/images/Logo.png";
 import { FaRupeeSign } from "react-icons/fa";
 
@@ -14,7 +14,7 @@ import { Button, Avatar, Badge } from "@mui/material";
 import CountryDropDown from "./CountryDropDown";
 import { CountryDropDownContext, MyContext } from "../../store/Context";
 import axios from "axios";
-import { getCategorySlice } from "../../store/reduxSlice";
+import { getCategorySlice, getFilterData } from "../../store/reduxSlice";
 
 
 function Header() {
@@ -30,10 +30,12 @@ function Header() {
   const loggedIn = useSelector((state)=>state.isLoggedIn.value)
   const userData = useSelector((state)=>state.userData.value)
   const updationUser = useSelector((state)=>state.userData.isUpdate);
-  const [cartItems,setCartItems] = useState(userData?.cart?.length);
+
+  const [cartItems,setCartItems] = useState(0);
 
 
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const handleScroll = () => {
     if (window.scrollY >= 100) {
@@ -56,7 +58,7 @@ function Header() {
 
       setSubCategories(res.data)
 
-      console.log(res.data)
+     
 
 
     }catch(err)
@@ -82,21 +84,45 @@ function Header() {
     dispatch(getCategorySlice(name));
   };
 
+  // const handleSubCategory = (elem)=>{
+
+  //   dispatch(getFilterData((prev)=>({
+  //     ...prev,subcategory:elem
+  //   })))
+
+  //   navigate('/Listing');
+    
+
+  // }
+
 
   useEffect(()=>{
 
 
      const getUsers = async () => {
-    try {
-      let res = await axios.get(
-        `http://localhost:3000/api/users/get-user/${userData._id}`
-      );
 
-      setCartItems(res.data.cart);
+      if(userData._id)
+      {
+        let res = await axios.get(
+          `http://localhost:3000/api/users/get-user/${userData._id}`
+        );
+  
+        setCartItems(res.data.cart);
+  
+  
+ 
+
+      }
+      else{
+        
+        setCartItems(0)
+      }
+  
       
-    } catch (err) {
-      alert("user not fetched...");
-    }
+
+      
+      
+   
   };
 
   getUsers()
@@ -104,7 +130,7 @@ function Header() {
     
   
       
-  },[updationUser])
+  },[updationUser,loggedIn])
   useEffect(() => {
     const getCategories = async (req, res) => {
       try {
@@ -171,7 +197,7 @@ function Header() {
               {userData.wallet > 0 ? userData.wallet : "00.00"}
             </span>
           </Link>
-          <Link to={"/cart"}>
+          <Link to={loggedIn?"/cart":"/signin"}>
             <span className={styles["addtoCart"]}>
               <Badge badgeContent={cartItems?.length} showZero color="primary" >
               <HiOutlineShoppingBag />
@@ -212,12 +238,13 @@ function Header() {
             onMouseLeave={handleMouseLeave}
           >
             <ul>
-              {categoryObj.map((item) => {
+              {categoryObj.map((item,idx) => {
                 return (
                   <li
                     onMouseEnter={() =>
                       handleSliderCategories(item.categoryname)
                     }
+                    key={idx}
                   >
                     <Link
                       to={"/Listing"}
@@ -323,7 +350,7 @@ function Header() {
                 </span>
                 <Link
                   to={"/Listing"}
-                  onClick={() => handleSettingCategory(item.categoryname)}
+                  // onClick={() => handleSettingCategory(item.categoryname)}
                 >
                   {item.categoryname.toUpperCase()} 
                 </Link>
@@ -343,7 +370,7 @@ function Header() {
                 >
 
                   {subCategories.map((elem)=> {
-                    return (  <Link to={'/Listing'}>
+                    return (  <Link to={'/Listing'} onClick={()=>handleSubCategory(elem)}>
                     <Button
                       style={{
                         width: "100%",

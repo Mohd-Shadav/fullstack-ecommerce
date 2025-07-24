@@ -15,7 +15,7 @@ import ProductDetails from "./components/Home/ProductDetails/ProductDetails";
 import CartComponent from "./components/Home/AddToCart/CartComponent";
 import SignIn from "./components/Auth/SignIn";
 import SignUp from "./components/Auth/SignUp";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { login, userAllData } from "./store/reduxSlice";
 import MyProfile from "./components/client/MyProfile";
 
@@ -23,6 +23,7 @@ function App() {
   const URL = "https://countriesnow.space/api/v0.1/countries";
 
   const [countryList, setCountryList] = useState([]);
+  const loggedIn = useSelector((state)=>state.isLoggedIn.value)
 
   const [isHeaderFooter,setIsHeaderFooter] = useState(true);
   const [isLoggedIn,setIsLoggedIn] = useState(false);
@@ -50,22 +51,29 @@ function App() {
 
   useEffect(() => {
     async function fetchUserFromCookie() {
-      try {
+    
         const res = await axios.get('http://localhost:3000/api/users/auth', {
           withCredentials: true
         });
 
      
+
+     
+         if(res.status===200)
+         {
         dispatch(login());
         localStorage.setItem("userID",res.data._id);
         dispatch(userAllData(res.data))
-      } catch (err) {
-        console.log("User not logged in or invalid token.");
-      }
+         }
+         else{
+        localStorage.setItem("userID","");
+        dispatch(userAllData({}))
+         }
+      
     }
 
     fetchUserFromCookie();
-  }, []);
+  }, [loggedIn]);
 
 
   useEffect(() => {

@@ -77,13 +77,14 @@ export default function UserDashboard() {
       let res = await axios.get('http://localhost:3000/api/users/logout',{
         withCredentials:true
       });
-      console.log(res)
+     
 
       localStorage.setItem('userID',"");
 
       alert("Logged Out Successfully...")
       navigate('/')
       dispatch(logout());
+      dispatch(userAllData({}));
 
 
     }catch(err)
