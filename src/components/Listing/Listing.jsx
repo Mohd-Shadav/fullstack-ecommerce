@@ -13,7 +13,7 @@ import ProductCard from "../Home/LandingPageDocs/ProductCard";
 import { MyContext } from "../../store/Context";
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
-import { getCategorySlice, getFilterData } from "../../store/reduxSlice";
+
 import NoResultFound from "../NoResultFound/NoResultFound";
 
 function Listing() {
@@ -44,6 +44,7 @@ function Listing() {
 
   const filterProducts = async () => {
     try {
+   
       let res = await axios.post(
         `http://localhost:3000/api/products/${category}/get-filterized-data`,
         filterData,
@@ -60,14 +61,19 @@ function Listing() {
     }
   };
 
-  useEffect(()=>{
+  // useEffect(()=>{
     
-      filterProducts();
+  //     filterProducts();
 
-  },[updationFilter])
+  // },[updationFilter])
 
   useEffect(() => {
     context.setIsHeaderFooter(true);
+    
+
+   
+
+    
 
     
   }, []);
@@ -75,10 +81,12 @@ function Listing() {
 
 
   useEffect(() => {
-    getProducts();
+
+    filterProducts();
+   
    
 
-  }, [grid,category]);
+  }, [grid,category,updationFilter]);
   return (
     <div className={`d-flex mt-3`}>
       <div className={`container ${styles["sidebar-contentRight-container"]}`}>

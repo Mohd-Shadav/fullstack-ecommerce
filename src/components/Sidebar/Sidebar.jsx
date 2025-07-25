@@ -27,12 +27,13 @@ function Sidebar() {
        const category = useSelector((state)=>state.category.value)
    const [getFeaturedProducts,setGetFeaturedProducts] = useState([]);
       const [subCategoriesList,setSubCategoriesList] = useState([]);
+      const subcategoryValue = useSelector((state)=>state.filterDataSlice.value)
       const dispatch = useDispatch();
 
      
 const [filterData,setFilterData] = useState({
-  subcategory:"",
-  pricerange:[],
+  subcategory:subcategoryValue.subcategory,
+  pricerange:[100,60000],
   rating:3.5
 })
 
@@ -54,7 +55,6 @@ const [filterData,setFilterData] = useState({
 };
 
 useEffect(()=>{
-
 
 
 
@@ -104,19 +104,16 @@ useEffect(()=>{
             <div className={`${styles['radio-btns-container']}`}>
             <FormControl>
       
-      <RadioGroup
-        aria-labelledby="demo-radio-buttons-group-label"
-        defaultValue="men"
-        name="radio-buttons-group"
-      >
-      <FormControlLabel className={`${styles['radio-btns']}`} value={""} control={<Radio />} label={"All"} name={"subcategory"} onChange={handleFilterization}/>
-     {subCategoriesList.map((item)=>{
-      return (
-           <FormControlLabel className={`${styles['radio-btns']}`} value={item} control={<Radio />} label={item} name={"subcategory"} onChange={handleFilterization}/>
-      )
-     })}
-       
-      </RadioGroup>
+     <RadioGroup
+  name="subcategory"
+  value={subcategoryValue.subcategory ? subcategoryValue.subcategory : ""}
+  onChange={handleFilterization}
+>
+  <FormControlLabel value="" control={<Radio />} label="All" />
+  {subCategoriesList.map((item) => (
+    <FormControlLabel key={item} value={item} control={<Radio />} label={item} />
+  ))}
+</RadioGroup>
     </FormControl>
             </div>
         </div>
@@ -163,9 +160,9 @@ useEffect(()=>{
           <h6>FEATURED PRODUCTS</h6>
         <Swiper navigation={true} modules={[Navigation]} className="mySwiper mt-4">
        
-        {getFeaturedProducts.map((item)=>(
-          <SwiperSlide>
-        <ProductCard product={item}/>
+        {getFeaturedProducts.map((item,idx)=>(
+          <SwiperSlide key={idx}>
+        <ProductCard key={idx} product={item}/>
         </SwiperSlide>
         ))
 

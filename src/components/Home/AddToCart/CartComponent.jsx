@@ -8,7 +8,7 @@ import { MyContext } from "../../../store/Context";
 import axios from "axios";
 import EmptyCartMessage from "../../NoResultFound/EmptyCartMessage";
 import { Link } from "react-router-dom";
-import { useDispatch } from "react-redux";
+import { useDispatch , useSelector} from "react-redux";
 import { getUserDataUpdationTrigger } from "../../../store/reduxSlice";
 
 
@@ -16,6 +16,7 @@ function CartComponent() {
   const context = useContext(MyContext);
 
   const [userid, setUserId] = useState(localStorage.getItem("userID"));
+  const userrr = useSelector((state)=>state.userData.value)
 
   const dispatch = useDispatch();
 
@@ -81,35 +82,51 @@ const handleRemoveItem = async(id)=>{
       );
 
       setCartItems(res.data.cart);
+   
+
+       
+      
+      
+       
       
     } catch (err) {
       alert("user not fetched...");
     }
   };
 
+  useEffect(()=>{
+
+    if(localStorage.getItem("userID"))
+    {
+      getUsers();
+    }
+    
+
+  },[handleRendering])
+
+  
   useEffect(() => {
     context.setIsHeaderFooter(true);
 
 
-    if(localStorage.getItem("userID"))
-    {
-   getUsers();
-      if (cartItems && cartItems.length > 0) {
-    const total = cartItems.reduce((acc, item) => {
-      return acc + item.quantity * item.product.discountprice;
-    }, 0);
-  setSubTotalAmount(total);
-
-  setTotalAmount(subTotalAmount+shippingAmount);
-
-  setShippingAmount(total>500?0:50)
+    if (!cartItems || cartItems.length === 0) {
+    setSubTotalAmount(0);
+    setShippingAmount(0);
+    setTotalAmount(0);
+    return;
   }
-    }else{
-      
-    }
 
- 
-  }, [cartItems,handleRendering]);
+  const subtotal = cartItems.reduce(
+    (acc, item) => acc + item.quantity * item.product.discountprice,
+    0
+  );
+  const shipping = subtotal > 500 ? 0 : 50;
+  const total = subtotal + shipping;
+
+  setSubTotalAmount(subtotal);
+  setShippingAmount(shipping);
+  setTotalAmount(total);
+}, [cartItems]);
 
   return (
     <section className="container mt-3">

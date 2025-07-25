@@ -14,7 +14,7 @@ import { Button, Avatar, Badge } from "@mui/material";
 import CountryDropDown from "./CountryDropDown";
 import { CountryDropDownContext, MyContext } from "../../store/Context";
 import axios from "axios";
-import { getCategorySlice, getFilterData } from "../../store/reduxSlice";
+import { getCategorySlice, getFilterData, getFilterDataUpdationTrigger } from "../../store/reduxSlice";
 
 
 function Header() {
@@ -30,6 +30,14 @@ function Header() {
   const loggedIn = useSelector((state)=>state.isLoggedIn.value)
   const userData = useSelector((state)=>state.userData.value)
   const updationUser = useSelector((state)=>state.userData.isUpdate);
+  const filterSubcategory = useSelector((state)=>state.filterDataSlice.value);
+ 
+ 
+  const [filterData,setFilterData] = useState({
+    subcategory:filterSubcategory.subcategory,
+    pricerange:[100,60000],
+    rating:3.5
+  })
 
   const [cartItems,setCartItems] = useState(0);
 
@@ -76,24 +84,56 @@ function Header() {
     setAllCategoryDropper(!allCategoryDropper);
   };
 
-  const handleSliderCategories = (item) => {
-    setIsSliderAllCategory((prev) => (prev === item ? "" : item));
-  };
+const handleSliderCategories = async (categoryName) => {
+  try {
+    setIsSliderAllCategory(categoryName);
+    let getCategory = await axios.get(`http://localhost:3000/api/category/category-name/${categoryName}`);
+    let res = await axios.get(`http://localhost:3000/api/category/${getCategory.data._id}/sub-category`);
+    setSubCategories(res.data);
+  } catch (err) {
+    alert("Failed to load subcategories");
+  }
+};
 
   const handleSettingCategory = (name) => {
     dispatch(getCategorySlice(name));
+      setFilterData((prev)=>({
+      ...prev,subcategory:""
+    }))
   };
 
-  // const handleSubCategory = (elem)=>{
+  const handleSubCategory =(item,elem)=>{
 
-  //   dispatch(getFilterData((prev)=>({
-  //     ...prev,subcategory:elem
-  //   })))
 
-  //   navigate('/Listing');
+    setFilterData((prev)=>({
+      ...prev,subcategory:elem
+    }))
+
+
+
+    dispatch(getCategorySlice(item))
+ 
+    
+    navigate('/Listing');
+
+ 
+
+
     
 
-  // }
+  }
+
+  useEffect(()=>{
+    dispatch(getFilterData(filterData));
+    dispatch(getFilterDataUpdationTrigger());
+
+
+
+
+    
+        
+
+  },[filterData])
 
 
   useEffect(()=>{
@@ -231,102 +271,74 @@ function Header() {
             </span>
           </div>
 
-          <div
-            className={`${styles["allcategory-dropper"]} ${
-              allCategoryDropper ? styles["activeDropperAll"] : ""
-            }`}
-            onMouseLeave={handleMouseLeave}
-          >
-            <ul>
-              {categoryObj.map((item,idx) => {
-                return (
-                  <li
-                    onMouseEnter={() =>
-                      handleSliderCategories(item.categoryname)
-                    }
-                    key={idx}
-                  >
-                    <Link
-                      to={"/Listing"}
-                      onClick={() => handleSettingCategory(item.categoryname)}
-                    >
-                      <Button>
-                        <span>
-                          <img src={item.categoryicon} alt="" />
-                        </span>{" "}
-                        {item.categoryname}
-                      </Button>
-                    </Link>
-                  </li>
-                );
-              })}
-            </ul>
+          
 
-            {isSliderAllCategory.includes("Electronics") ? (
-              <div
-                className={`${styles["slider-category-cont"]} ${
-                  isSliderAllCategory === "Electronics"
-                    ? styles["slider-active"]
-                    : ""
-                } `}
+        {/* Vertical dropper */}
+<div
+  className={`${styles["allcategory-dropper"]} ${
+    allCategoryDropper ? styles["activeDropperAll"] : ""
+  }`}
+  onMouseLeave={handleMouseLeave}
+>
+  <ul>
+    {categoryObj.map((item, idx) => (
+      <li
+        key={idx}
+        onMouseEnter={() => handleSliderCategories(item.categoryname)}
+     
+      >
+        <Link
+          to={"/Listing"}
+          onClick={() => handleSettingCategory(item.categoryname)}
+        >
+          <Button>
+            <span>
+              <img src={item.categoryicon} alt="" />
+            </span>
+            {item.categoryname}
+          </Button>
+        </Link>
+      </li>
+    ))}
+  </ul>
+
+  {/* ✅ Dynamic subcategory slider — replaces hardcoded logic */}
+  {isSliderAllCategory && (
+    <div
+      className={`${styles["slider-category-cont"]} ${styles["slider-active"]}`}
+      style={{
+        visibility: isSliderAllCategory ? "visible" : "hidden",
+        opacity: isSliderAllCategory ? 1 : 0,
+        transform: isSliderAllCategory ? "translateY(0)" : "translateY(20px)",
+        transition: "opacity 0.3s, transform 0.3s",
+      }}
+    >
+      <ul>
+        {subCategories.map((elem, idx) => (
+          <li key={idx}>
+            <Link
+              to={"/Listing"}
+              onClick={() =>
+                handleSubCategory(isSliderAllCategory, elem)
+              }
+            >
+              <Button
                 style={{
-                  visibility: isSliderAllCategory ? "visible" : "hidden",
+                  width: "100%",
+                  textAlign: "start",
+                  display: "flex",
+                  justifyContent: "flex-start",
                 }}
               >
-                <ul>
-                  <li>
-                    <Link>
-                      <Button>Laptops</Button>
-                    </Link>
-                  </li>
-                  <li>
-                    <Link>
-                      <Button>Smart Watches</Button>
-                    </Link>
-                  </li>
-                  <li>
-                    <Link>
-                      <Button>Cameras</Button>
-                    </Link>
-                  </li>
-                </ul>
-              </div>
-            ) : [
-                "Groceries",
-                "Beauty",
-                "Wellness",
-                "Sports",
-                "Jewellery",
-              ].includes(isSliderAllCategory) ? (
-              <></>
-            ) : (
-              <div
-                className={`${styles["slider-category-cont"]} ${
-                  isSliderAllCategory === "Fashion" ||
-                  isSliderAllCategory === "Bags" ||
-                  isSliderAllCategory === "Footwear"
-                    ? styles["slider-active"]
-                    : ""
-                } `}
-                style={{
-                  visibility: isSliderAllCategory ? "visible" : "hidden",
-                }}
-              >
-                <ul>
-                  <li>
-                    <Link>
-                      <Button>Men</Button>
-                    </Link>
-                  </li>
-                  <li>
-                    <Link>
-                      <Button>Women</Button>
-                    </Link>
-                  </li>
-                </ul>
-              </div>
-            )}
-          </div>
+                {elem}
+              </Button>
+            </Link>
+          </li>
+        ))}
+      </ul>
+    </div>
+  )}
+</div>
         </div>
 
 
@@ -350,7 +362,8 @@ function Header() {
                 </span>
                 <Link
                   to={"/Listing"}
-                  // onClick={() => handleSettingCategory(item.categoryname)}
+                   onClick={() => handleSettingCategory(item.categoryname)}
+              
                 >
                   {item.categoryname.toUpperCase()} 
                 </Link>
@@ -370,7 +383,7 @@ function Header() {
                 >
 
                   {subCategories.map((elem)=> {
-                    return (  <Link to={'/Listing'} onClick={()=>handleSubCategory(elem)}>
+                    return (  <Link to={'/Listing'} onClick={()=>handleSubCategory(item.categoryname,elem)}>
                     <Button
                       style={{
                         width: "100%",

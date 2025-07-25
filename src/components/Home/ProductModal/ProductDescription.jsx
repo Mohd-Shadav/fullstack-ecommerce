@@ -6,9 +6,13 @@ import { MdAddShoppingCart } from 'react-icons/md';
 import axios from 'axios';
 import { useDispatch } from 'react-redux';
 import { getUserDataUpdationTrigger } from '../../../store/reduxSlice';
+import { useEffect } from 'react';
 function ProductDescription({product}) {
     const [sizes,setSizes] = useState('M');
     const [count,setCount] = useState(1);
+    const [cartItems,setCartItems] = useState(0)
+      const [handleRendering,setHandleRendering] = useState(false)
+      const userid = localStorage.getItem("userID")
     const dispatch = useDispatch()
   
   
@@ -19,14 +23,33 @@ function ProductDescription({product}) {
         setSizes(size);
     }
 
+      const getUsers = async () => {
+    try {
+      let res = await axios.get(
+        `http://localhost:3000/api/users/get-user/${userid}`
+      );
+
+      setCartItems(res.data.cart);
+      
+      
+    } catch (err) {
+      alert("user not fetched...");
+    }
+  };
+
+
+
+
 
      const handleCart = async (id)=>{
           try{
 
             let userid = localStorage.getItem("userID")
 
+   
           
-            let res = await axios.post(`http://localhost:3000/api/users/addtocart/${userid}/${product?._id}`)
+            let res = await axios.post(`http://localhost:3000/api/users/addtocart/${userid}/${id}/${Number(count)}`)
+            console.log(res)
           
             alert(`${res.data.product.name} Added Into Cart Successfully...`)
             dispatch(getUserDataUpdationTrigger());
@@ -37,6 +60,11 @@ function ProductDescription({product}) {
 
           }
         }
+
+
+        useEffect(()=>{
+          getUsers();
+        },[handleRendering]);
   return (
   
           <div className={`d-flex flex-column ${styles['descriptionMainCont']}`}>
@@ -65,9 +93,11 @@ function ProductDescription({product}) {
                       </div>
                       <div className={`d-flex ${styles['addToCartMainCont']}`}>
                       <div className={`d-flex ${styles['counterCont']}`}>
-                      <Button onClick={() => { if (count > 1) setCount(prevCount => prevCount - 1); }}><FaMinus /></Button>
+                      <Button  onClick={() => {
+                            if (count > 1) setCount((prev)=>prev-1)
+                          }}><FaMinus /></Button>
                         <span>{count}</span>
-                        <Button onClick={()=>{setCount(prev=>prev+1)}}><FaPlus /></Button>
+                        <Button onClick={()=>setCount((prev)=>prev+1)}><FaPlus /></Button>
                       </div>
                       <div className={`d-flex ${styles['addCartSubCont']}`}>
                         <Button onClick={()=>handleCart(product?._id)}><span><MdAddShoppingCart /></span> Add To Cart</Button>
