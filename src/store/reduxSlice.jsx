@@ -67,11 +67,27 @@ const filterDataSlice = createSlice({
         }
     }
 })
+
+
+const buyingItemSlice = createSlice({
+    name:"buyingitem",
+    initialState:{
+        value:{}
+    },
+    reducers:{
+        buyingItemDetails:(state,action)=>{
+            state.value = action.payload
+
+        }
+    }
+})
 export const {getCategorySlice} = categorySlice.actions;
 export const {login,logout} = loggedInOutSlice.actions;
 export const {userAllData,getUserDataUpdationTrigger} = userData.actions;
 export const {getFilterData,getFilterDataUpdationTrigger} = filterDataSlice.actions;
+export const {buyingItemDetails} = buyingItemSlice.actions;
 export const categorySlicia =  categorySlice.reducer;
 export const loggedInOutSlicia = loggedInOutSlice.reducer
 export const userDataSlicia = userData.reducer
 export const filterDataSlicia = filterDataSlice.reducer;
+export const buyingItemSlicia = buyingItemSlice.reducer;

@@ -18,6 +18,7 @@ import SignUp from "./components/Auth/SignUp";
 import { useDispatch, useSelector } from "react-redux";
 import { login, userAllData } from "./store/reduxSlice";
 import MyProfile from "./components/client/MyProfile";
+import Stepper from "./components/Checkout/Stepper";
 
 function App() {
   const URL = "https://countriesnow.space/api/v0.1/countries";
@@ -116,6 +117,7 @@ function App() {
           <Route path={"/signin"} element={<SignIn />} />
           <Route path={"/signup"} element={<SignUp />} />
           <Route path={"/myprofile"} element = {<MyProfile/>}/>
+          <Route path={"/checkout"} element={<Stepper/>}/>
         </Routes>
      {
       isHeaderFooter && (<>

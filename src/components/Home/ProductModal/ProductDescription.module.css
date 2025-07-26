@@ -126,8 +126,11 @@ gap: 1.3rem;
 
 }
 
+.buyBtnCont>*{
+    text-decoration: none;
+}
 
-.buyBtnCont>Button{
+.buyBtnCont>*>Button{
     display: flex;
     align-items: center;
     gap: 1rem;
@@ -149,20 +152,30 @@ gap: 1.3rem;
 
 
 
-/* sizes */
-.S-Size{
-    background: rgba(0, 0, 255, 0.509) ;
-    color: #fff;
+/* Container for variant options */
+.sizeCont div {
+  display: flex;
+  flex-wrap: wrap; /* Optional: wrap if too many variants */
+  align-items:flex-start;
+  gap: 10px;
+  margin-top: 10px;
 }
-.M-Size{
-    background: rgba(0, 0, 255, 0.509) ;
-    color: #fff;
+
+/* Variant box styles */
+.sizeCont>*>span {
+  padding: 8px 16px;
+  min-width: 70px; /* ✅ Wider boxes */
+  text-align: center;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: 0.3s;
+  background-color: #f9f9f9;
 }
-.L-Size{
-    background: rgba(0, 0, 255, 0.509) ;
-    color: #fff;
-}
-.XL-Size{
-    background: rgba(0, 0, 255, 0.509) ;
-    color: #fff;
+
+/* Highlight selected size */
+.sizeCont>*>span.selected {
+  background-color: #03456bc7;
+  color: white;
+  border-color: #03456bc7;
 }
