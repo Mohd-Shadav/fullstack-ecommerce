@@ -19,6 +19,7 @@ import CartComponent from '../Home/AddToCart/CartComponent';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { logout, userAllData } from '../../store/reduxSlice';
+import MyAddresses from './MyAddresses';
 
 // TabPanel Component
 function TabPanel(props) {
@@ -270,35 +271,8 @@ React.useEffect(()=>{
 
       {/* Address Tab */}
       <TabPanel value={value} index={3}>
-        <Box display="flex" justifyContent="space-between" alignItems="center">
-          <Typography variant="h6">Saved Addresses</Typography>
-          <Button startIcon={<AddLocationAlt />} onClick={() => setOpenAddressModal(true)}>
-            Add Address
-          </Button>
-        </Box>
-        <Grid container spacing={2} mt={1}>
-          {user.address?.map((addr, idx) => (
-            <Grid item xs={12} md={6} key={idx}>
-              <Paper
-                elevation={1}
-                sx={{
-                  p: 2,
-                  border: addr.isDefault ? '2px solid #1976d2' : '1px solid #ccc',
-                  borderRadius: 2,
-                }}
-              >
-                <Typography>
-                  {addr.street}, {addr.city}, {addr.state} {addr.zip}, {addr.country}
-                </Typography>
-                {addr.isDefault && (
-                  <Typography color="primary" variant="caption">
-                    Default Address
-                  </Typography>
-                )}
-              </Paper>
-            </Grid>
-          ))}
-        </Grid>
+       <MyAddresses/>
+      
       </TabPanel>
 
       {/* Floating Action Buttons */}

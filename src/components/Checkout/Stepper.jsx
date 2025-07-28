@@ -11,6 +11,7 @@ import { useSelector } from 'react-redux';
 // Step Components
 import OrderReview from './OrderReview';
 import OrderCredentials from './OrderCredentials';
+import MyAddresses from '../client/MyAddresses';
 
 const steps = ['Review Your Product', 'Order Credentials', 'Payment', 'Order Confirmation'];
 
@@ -64,7 +65,7 @@ export default function StepperFunction() {
       case 0:
         return <OrderReview order={order} />;
       case 1:
-        return <OrderCredentials/>;
+        return <MyAddresses/>;
       case 2:
         return <h3>helo 3</h3>;
       case 3:
