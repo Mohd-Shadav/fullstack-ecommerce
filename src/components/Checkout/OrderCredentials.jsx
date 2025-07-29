@@ -18,24 +18,7 @@ import {
 const OrderCredentials = () => {
   const [selectedAddress, setSelectedAddress] = useState('');
   const [open, setOpen] = useState(false);
-  const [addresses, setAddresses] = useState([
-    {
-      id: 1,
-      label: 'Home',
-      addressLine: '123 Street, Delhi',
-      city: 'Delhi',
-      pincode: '110001',
-      phone: '9876543210',
-    },
-    {
-      id: 2,
-      label: 'Office',
-      addressLine: '456 Avenue, Mumbai',
-      city: 'Mumbai',
-      pincode: '400001',
-      phone: '9876500000',
-    },
-  ]);
+  const [addresses, setAddresses] = useState([]);
 
   const [formData, setFormData] = useState({
     label: '',
@@ -105,6 +88,7 @@ const OrderCredentials = () => {
           ))}
         </RadioGroup>
       </FormControl>
+
 
       <Button variant="outlined" color="primary" onClick={handleDialogOpen} sx={{ mt: 2 }}>
         Add New Address

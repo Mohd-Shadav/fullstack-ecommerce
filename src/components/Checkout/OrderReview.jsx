@@ -10,11 +10,7 @@ import {
 
 const OrderReview = () => {
 const [order,setOrder] = useState(JSON.parse(localStorage.getItem("orderDetails")))
-    useEffect(()=>{
 
-        console.log(order)
-        
-    },[])
   return (
     <Card sx={{ display: 'flex',flexDirection:"column",justifyContent:"center",alignItems:"center", gap: 2, p: 4, mb: 2, boxShadow: 0, borderRadius: 3 }}>
       <CardMedia
@@ -28,9 +24,13 @@ const [order,setOrder] = useState(JSON.parse(localStorage.getItem("orderDetails"
           {order.productname}
         </Typography>
 
+{order.variant &&(
         <Typography variant="body1" color="text.secondary">
-          Variant: <strong>{order.variant}</strong>
-        </Typography>
+
+           Variant: <strong>{order.variant}</strong>
+
+        </Typography>)
+}
 
         <Typography variant="body1" color="text.secondary">
           Quantity: <strong>{order.quantity}</strong>

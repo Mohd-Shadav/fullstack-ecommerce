@@ -12,6 +12,7 @@ import { useSelector } from 'react-redux';
 import OrderReview from './OrderReview';
 import OrderCredentials from './OrderCredentials';
 import MyAddresses from '../client/MyAddresses';
+import PaymentGateway from './PaymentGateway';
 
 const steps = ['Review Your Product', 'Order Credentials', 'Payment', 'Order Confirmation'];
 
@@ -67,9 +68,7 @@ export default function StepperFunction() {
       case 1:
         return <MyAddresses/>;
       case 2:
-        return <h3>helo 3</h3>;
-      case 3:
-        return <h5>gdsdhj</h5>;
+        return <PaymentGateway order={order} />;
       default:
         return <div>Unknown Step</div>;
     }
@@ -115,13 +114,9 @@ export default function StepperFunction() {
                 Back
               </Button>
               <Box sx={{ flex: '1 1 auto' }} />
-              {isStepOptional(activeStep) && (
-                <Button color="inherit" onClick={handleSkip} sx={{ mr: 1 }}>
-                  Skip
-                </Button>
-              )}
-              <Button onClick={handleNext}>
-                {activeStep === steps.length - 1 ? 'Finish' : 'Next'}
+        
+              <Button onClick={handleNext}  disabled ={activeStep === steps.length - 2 ? true : false}>
+                Next
               </Button>
             </Box>
           </React.Fragment>

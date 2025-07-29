@@ -19,6 +19,7 @@ function ProductDescription({ product }) {
 
 
   const [buyItem, setBuyItem] = useState({
+    productid:product?._id,
     productname: product?.name,
     productimage: product?.images?.thumbnail,
     rating: product?.rating,
@@ -94,6 +95,8 @@ function ProductDescription({ product }) {
     try {
       const userid = localStorage.getItem("userID");
       const res = await axios.post(`http://localhost:3000/api/users/addtocart/${userid}/${id}/${Number(count)}`);
+
+    
       alert(`${res.data.product.name} Added Into Cart Successfully...`);
       dispatch(getUserDataUpdationTrigger());
     } catch (err) {
@@ -103,10 +106,11 @@ function ProductDescription({ product }) {
 
   const handleBuyItem = () => {
    
+   
         dispatch(buyingItemDetails(buyItem));
-            localStorage.setItem("orderDetails",JSON.stringify(buyItem))
+        localStorage.setItem("orderDetails",JSON.stringify(buyItem))
 
-  };
+};
 
   useEffect(() => {
     getUsers();
