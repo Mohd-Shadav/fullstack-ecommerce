@@ -35,7 +35,9 @@ function App() {
     try {
       const response = await axios.get(URL);
 
-      setCountryList(response.data.data);
+  
+
+      setCountryList(response.data.data || []);
     } catch (err) {
       console.log(err);
     }
