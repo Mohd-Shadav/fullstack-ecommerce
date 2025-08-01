@@ -31,21 +31,22 @@
 
 
 .table-head{
-    border-radius: 10px !important;
+    border-radius: 10px!important;
 }
 
 .table-head tr th{
     background-color: #59595946 !important;
     padding:auto 20px !important;
+    
 
 }
 
 .table-head tr th:first-child{
-    border-radius: 10px 0 0 10px !important;
+    border-radius: 10px 0 0 0px !important;
 }
 
 .table-head tr th:last-child{
-    border-radius: 0px 10px 10px 0px !important;
+    border-radius: 0px 10px 0px 0px !important;
 }
 
 .table-body tr td{
@@ -59,6 +60,7 @@
     font-size: 15px !important;
     background-color: rgb(220, 16, 16) !important;
     color: #fff !important;
+    width: 100%;
     &:active{
         background-color: rgba(128, 0, 128, 0.742) !important;
     }

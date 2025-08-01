@@ -1,0 +1,53 @@
+.main-div-my-orders{
+    display: flex;
+    justify-content: space-between;
+    align-items:center;
+    box-shadow: 1px 1px 5px rgb(209, 209, 209);
+    border-radius: 20px;
+    margin-top: 1rem;
+    padding: 0.5rem 1rem;
+    transition: transform 0.2s ease-in-out;
+    cursor: pointer;
+    &:hover{
+        transform: scale(1.01);
+    }
+
+
+}
+
+.main-div-my-orders img{
+
+    width: 230px;
+    height: 230px;
+    object-fit: cover;
+    border-radius: 20px;
+
+}
+
+.image-product-div-my-orders{
+
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+
+}
+
+.product-details-div{
+
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+
+}
+
+.order-status-div{
+    display: flex;
+    align-items:center;
+     gap: 2rem;
+}
+
+.order-status-div>span{
+    background-color: rgb(163, 163, 163);
+    padding: 0.3rem 3rem;
+    border-radius: 20px;
+}

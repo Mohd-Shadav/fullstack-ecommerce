@@ -9,6 +9,7 @@ import {
   Add as AddIcon,
   KeyboardArrowUp as UpIcon,
   Email, Phone, AddLocationAlt,
+  Padding,
 } from '@mui/icons-material';
 import EmailIcon from "@mui/icons-material/Email";
 import PhoneIcon from "@mui/icons-material/Phone";
@@ -20,6 +21,7 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { logout, userAllData } from '../../store/reduxSlice';
 import MyAddresses from './MyAddresses';
+import MyOrders from './MyOrders';
 
 // TabPanel Component
 function TabPanel(props) {
@@ -64,8 +66,10 @@ export default function UserDashboard() {
   const handleChange = (event, newValue) => setValue(newValue);
 
   const [user,setUser] = React.useState([]);
+  const [orders,setOrders] = React.useState([])
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const userID = localStorage.getItem("userID");
 
   // Placeholder modals control
   const [openEditModal, setOpenEditModal] = React.useState(false);
@@ -144,6 +148,33 @@ React.useEffect(()=>{
   fetchUser();
 
 },[])
+
+
+
+
+
+    const fetchOrders = async ()=>{
+        try{
+
+            let res = await axios.get(`http://localhost:3000/api/users/get-user/${userID}`)
+
+            console.log(res.data.orders);
+
+            setOrders(res.data.orders);
+
+        }catch(err)
+        {
+            alert("Failed to fetch Error");
+
+        }
+
+    }
+
+
+    React.useEffect(()=>{
+        fetchOrders();
+
+    },[])
 
 
   const fabs = [
@@ -255,18 +286,12 @@ React.useEffect(()=>{
 
       {/* Orders Tab */}
       <TabPanel value={value} index={2}>
-        <Typography variant="h6">Your Orders</Typography>
-        <Grid container spacing={2} mt={1}>
-          {user.orders?.map((order) => (
-            <Grid key={order.id} item xs={12} sm={6} md={4}>
-              <Paper sx={{ p: 2, borderRadius: 2 }}>
-                <Typography>Order ID: {order.id}</Typography>
-                <Typography>Status: {order.status}</Typography>
-                <Typography>Total: ${order.total}</Typography>
-              </Paper>
-            </Grid>
-          ))}
-        </Grid>
+        <Typography variant="h6">You Ordered <span style={{color:"red",fontWeight:"600"}}>{orders.length}</span> Orders</Typography>
+       {orders.map((item,idx)=>{
+        return   <MyOrders order={item} key={idx} idx={idx}/>
+       })
+
+       }
       </TabPanel>
 
       {/* Address Tab */}

@@ -9,7 +9,7 @@ import axios from "axios";
 import EmptyCartMessage from "../../NoResultFound/EmptyCartMessage";
 import { Link } from "react-router-dom";
 import { useDispatch , useSelector} from "react-redux";
-import { getUserDataUpdationTrigger } from "../../../store/reduxSlice";
+import { buyingItemDetails, getUserDataUpdationTrigger } from "../../../store/reduxSlice";
 
 
 function CartComponent() {
@@ -27,6 +27,7 @@ function CartComponent() {
 
   const [shippingAmount,setShippingAmount] = useState(0)
   const [handleRendering,setHandleRendering] = useState(false)
+
   
 
 
@@ -94,6 +95,38 @@ const handleRemoveItem = async(id)=>{
     }
   };
 
+
+const handleBuyItem = (id) => {
+  let data = cartItems.find((item) => item?.product?._id === id);
+
+  if (!data) {
+    console.warn("No item found for ID:", id);
+    return;
+  }
+
+  const objBuyItem = {
+    productid: data.product._id,
+    productname: data.product.name,
+    productimage: data.product.images?.thumbnail,
+    rating: data.product.rating,
+    quantity: data.quantity,
+    variant: "",
+    price: data.product.discountprice * data.quantity,
+  };
+
+  dispatch(buyingItemDetails(objBuyItem));
+
+  localStorage.setItem("orderDetails", JSON.stringify(objBuyItem));
+};
+
+
+
+const handleCheckout = async()=>{
+
+  console.log(cartItems);
+}
+
+
   useEffect(()=>{
 
     if(localStorage.getItem("userID"))
@@ -148,6 +181,7 @@ const handleRemoveItem = async(id)=>{
                   <th width="20%">Quantity</th>
                   <th width="15%">Subtotal</th>
                   <th width="5%">Remove</th>
+                  <th></th>
                 </tr>
               </thead>
               <tbody className={`${styles["table-body"]}`}>
@@ -204,6 +238,12 @@ const handleRemoveItem = async(id)=>{
                     <td>
                      <Button color="error" onClick={()=>handleRemoveItem(item?.product._id)}> <RxCross2 /></Button>
                     </td>
+                    <td>
+                     <Link to={'/checkout'}>
+                     
+                      <Button color="primary" variant="contained" onClick={()=>handleBuyItem(item?.product?._id)}>Buy</Button>
+                     </Link>
+                    </td>
                   </tr>
                 ))}
               </tbody>
@@ -234,7 +274,7 @@ const handleRemoveItem = async(id)=>{
             </div>
             <div className="d-flex justify-content-between">
               <span>Estimate For</span>
-              <span>UK</span>
+              <span>{userrr?.address?.[0].city.toUpperCase()},{userrr?.address?.[0].district.toUpperCase()}</span>
             </div>
             <div className="d-flex justify-content-between">
               <span>Total</span>
@@ -243,13 +283,15 @@ const handleRemoveItem = async(id)=>{
                 {totalAmount}
               </span>
             </div>
-            <Button className={`${styles["btn-checkout"]}`}>
+         <Link to={''}>
+            <Button className={`${styles["btn-checkout"]}`} onClick={handleCheckout}>
               {" "}
               <span>
                 <IoBagCheckOutline />
               </span>{" "}
               Checkout
             </Button>
+         </Link>
           </div>
         </div>
       </div>

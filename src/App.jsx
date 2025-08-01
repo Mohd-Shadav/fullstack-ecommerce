@@ -22,7 +22,8 @@ import Stepper from "./components/Checkout/Stepper";
 import PaymentSuccess from "./components/Checkout/PaymentSuccess";
 
 function App() {
-  const URL = "https://countriesnow.space/api/v0.1/countries";
+  // const URL = "https://countriesnow.space/api/v0.1/countries";
+  const URL = "https://wft-geo-db.p.rapidapi.com/v1/geo/countries";
 
   const [countryList, setCountryList] = useState([]);
   const loggedIn = useSelector((state)=>state.isLoggedIn.value)
@@ -35,6 +36,8 @@ function App() {
     try {
       const response = await axios.get(URL);
 
+        console.log(response.json)
+
   
 
       setCountryList(response.data.data || []);
@@ -45,6 +48,8 @@ function App() {
 
   useEffect(() => {
     getCountries();
+
+  
   }, []);
 
   const [scroller, setScroller] = useState(false);
