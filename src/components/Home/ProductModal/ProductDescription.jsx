@@ -18,15 +18,20 @@ function ProductDescription({ product }) {
   const dispatch = useDispatch();
 
 
-  const [buyItem, setBuyItem] = useState({
-    productid:product?._id,
-    productname: product?.name,
-    productimage: product?.images?.thumbnail,
-    rating: product?.rating,
-    quantity: count,
-    variant: sizes,
-    price: product?.discountprice * count
-  });
+const [buyItems, setBuyItems] = useState([]);
+
+
+const createBuyItem = () => ({
+  productid: product?._id,
+  productname: product?.name,
+  productimage: product?.images?.thumbnail,
+  rating: product?.rating,
+  quantity: count,
+  variant: sizes,
+  price: product?.discountprice * count
+});
+
+
 
   const handleSizes = (variant) => {
     setSizes(variant);
@@ -48,53 +53,85 @@ function ProductDescription({ product }) {
 
   }
 
-  const getUsers = async () => {
-    try {
-      const res = await axios.get(`http://localhost:3000/api/users/get-user/${userid}`);
-      setCartItems(res.data.cart);
+  // const getUsers = async () => {
+  //   try {
+  //     const res = await axios.get(`http://localhost:3000/api/users/get-user/${userid}`);
+  //     setCartItems(res.data.cart);
 
-      const sizesObj = product?.physicalSpecs?.size;
+  //     const sizesObj = product?.physicalSpecs?.size;
    
-      const volumes = product?.physicalSpecs?.volume;
-      const weights = product?.physicalSpecs?.weight;
+  //     const volumes = product?.physicalSpecs?.volume;
+  //     const weights = product?.physicalSpecs?.weight;
 
-      // 1. Sizes with stock
-         if (sizesObj && Object.keys(sizesObj).some((key) => sizesObj[key] > 0)) {
-      const availableSizes = Object.keys(sizesObj).filter((key) => sizesObj[key] > 0);
-      setVariants(availableSizes); // like ['S', 'L']
-      setSizes(availableSizes[0]);
-       setBuyItem((prev) => ({
-    ...prev,
-    variant: availableSizes[0],
-  }));
-    }
-      // 2. Volume values
-      else if (Array.isArray(volumes) && volumes.length > 0) {
-        const mappedVolumes = volumes.map(v => `${v} ml`)
-        setVariants(mappedVolumes);
-        setSizes(mappedVolumes[0]);
+  //     // 1. Sizes with stock
+  //        if (sizesObj && Object.keys(sizesObj).some((key) => sizesObj[key] > 0)) {
+  //     const availableSizes = Object.keys(sizesObj).filter((key) => sizesObj[key] > 0);
+  //     setVariants(availableSizes); // like ['S', 'L']
+  //     setSizes(availableSizes[0]);
+  //      setBuyItem((prev) => ({
+  //   ...prev,
+  //   variant: availableSizes[0],
+  // }));
+  //   }
+  //     // 2. Volume values
+  //     else if (Array.isArray(volumes) && volumes.length > 0) {
+  //       const mappedVolumes = volumes.map(v => `${v} ml`)
+  //       setVariants(mappedVolumes);
+  //       setSizes(mappedVolumes[0]);
 
-        setBuyItem((prev)=>({
-          ...prev,
-          variant:mappedVolumes[0]
-        }))
-      }
+  //       setBuyItem((prev)=>({
+  //         ...prev,
+  //         variant:mappedVolumes[0]
+  //       }))
+  //     }
    
      
-      // 4. Fallback
-      else {
-        setVariants([]);
-      }
+  //     // 4. Fallback
+  //     else {
+  //       setVariants([]);
+  //     }
 
-    } catch (err) {
-      alert("User not fetched...");
+  //   } catch (err) {
+  //     alert("User not fetched...");
+  //   }
+  // };
+
+  const getUsers = async () => {
+  try {
+    const res = await axios.get(`http://localhost:3000/api/users/get-user/${userid}`);
+    setCartItems(res.data.cart);
+
+    const sizesObj = product?.physicalSpecs?.size;
+    const volumes = product?.physicalSpecs?.volume;
+    const weights = product?.physicalSpecs?.weight;
+
+    // 1. Sizes with stock
+    if (sizesObj && Object.keys(sizesObj).some((key) => sizesObj[key] > 0)) {
+      const availableSizes = Object.keys(sizesObj).filter((key) => sizesObj[key] > 0);
+      setVariants(availableSizes);         // e.g., ['S', 'M', 'L']
+      setSizes(availableSizes[0]);         // set default selected size
     }
-  };
+    // 2. Volume values
+    else if (Array.isArray(volumes) && volumes.length > 0) {
+      const mappedVolumes = volumes.map((v) => `${v} ml`);
+      setVariants(mappedVolumes);
+      setSizes(mappedVolumes[0]);         // set default selected volume
+    }
+    // 3. Fallback
+    else {
+      setVariants([]);
+    }
 
+  } catch (err) {
+    alert("User not fetched...");
+  }
+};
+
+  
   const handleCart = async (id) => {
     try {
       const userid = localStorage.getItem("userID");
-      const res = await axios.post(`http://localhost:3000/api/users/addtocart/${userid}/${id}/${Number(count)}`);
+      const res = await axios.post(`http://localhost:3000/api/users/addtocart/${userid}/${id}/${Number(count)}/${sizes}`);
 
     
       alert(`${res.data.product.name} Added Into Cart Successfully...`);
@@ -104,12 +141,21 @@ function ProductDescription({ product }) {
     }
   };
 
-  const handleBuyItem = () => {
-   
-   
-        dispatch(buyingItemDetails(buyItem));
-        localStorage.setItem("orderDetails",JSON.stringify(buyItem))
+const handleBuyItem = () => {
+  const newItem = createBuyItem();
 
+  const alreadyExists = buyItems.some(
+    item => item.productid === newItem.productid && item.variant === newItem.variant
+  );
+
+  if (!alreadyExists) {
+    const updated = [...buyItems, newItem];
+    setBuyItems(updated);
+    dispatch(buyingItemDetails(updated));
+    localStorage.setItem("orderDetails", JSON.stringify(updated));
+  } else {
+    alert("Item already added");
+  }
 };
 
   useEffect(() => {

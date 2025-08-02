@@ -7,7 +7,7 @@ import { IoBagCheckOutline } from "react-icons/io5";
 import { MyContext } from "../../../store/Context";
 import axios from "axios";
 import EmptyCartMessage from "../../NoResultFound/EmptyCartMessage";
-import { Link } from "react-router-dom";
+import { Link,useNavigate } from "react-router-dom";
 import { useDispatch , useSelector} from "react-redux";
 import { buyingItemDetails, getUserDataUpdationTrigger } from "../../../store/reduxSlice";
 
@@ -27,7 +27,8 @@ function CartComponent() {
 
   const [shippingAmount,setShippingAmount] = useState(0)
   const [handleRendering,setHandleRendering] = useState(false)
-
+  const [order,setOrder] = useState([])
+  const navigate = useNavigate();
   
 
 
@@ -99,20 +100,22 @@ const handleRemoveItem = async(id)=>{
 const handleBuyItem = (id) => {
   let data = cartItems.find((item) => item?.product?._id === id);
 
+
+  console.log(data)
   if (!data) {
     console.warn("No item found for ID:", id);
     return;
   }
 
-  const objBuyItem = {
+  const objBuyItem = [{
     productid: data.product._id,
     productname: data.product.name,
     productimage: data.product.images?.thumbnail,
     rating: data.product.rating,
     quantity: data.quantity,
-    variant: "",
+    variant:data.variant,
     price: data.product.discountprice * data.quantity,
-  };
+  }];
 
   dispatch(buyingItemDetails(objBuyItem));
 
@@ -121,9 +124,36 @@ const handleBuyItem = (id) => {
 
 
 
-const handleCheckout = async()=>{
+const handleCheckout = ()=>{
 
-  console.log(cartItems);
+  // console.log(cartItems)
+
+   let check = cartItems.map((item)=>({
+
+    productid:item?.product?._id,
+    productname:item?.product?.name,
+    productimage:item?.product?.images?.thumbnail,
+    rating:item?.product?.rating,
+    quantity:item?.quantity,
+    variant:item?.variant,
+    price:item?.product?.discountprice * item?.quantity
+
+   
+   
+   }))
+
+     dispatch(buyingItemDetails(check));
+    localStorage.setItem("orderDetails",JSON.stringify(check))
+   
+
+
+  
+
+
+
+
+   console.log(check)
+
 }
 
 
@@ -283,7 +313,7 @@ const handleCheckout = async()=>{
                 {totalAmount}
               </span>
             </div>
-         <Link to={''}>
+         <Link to={'/checkout'}>
             <Button className={`${styles["btn-checkout"]}`} onClick={handleCheckout}>
               {" "}
               <span>

@@ -158,9 +158,11 @@ React.useEffect(()=>{
 
             let res = await axios.get(`http://localhost:3000/api/users/get-user/${userID}`)
 
-            console.log(res.data.orders);
-
+           
+           
             setOrders(res.data.orders);
+
+           
 
         }catch(err)
         {
@@ -288,7 +290,7 @@ React.useEffect(()=>{
       <TabPanel value={value} index={2}>
         <Typography variant="h6">You Ordered <span style={{color:"red",fontWeight:"600"}}>{orders.length}</span> Orders</Typography>
        {orders.map((item,idx)=>{
-        return   <MyOrders order={item} key={idx} idx={idx}/>
+        return   <MyOrders order={item} key={idx} user={user} idx={idx}/>
        })
 
        }

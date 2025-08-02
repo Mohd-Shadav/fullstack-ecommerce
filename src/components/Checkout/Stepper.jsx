@@ -56,6 +56,7 @@ export default function StepperFunction() {
   };
 
   React.useEffect(() => {
+    
     setOrder(JSON.parse(localStorage.getItem("orderDetails")));
 
 

@@ -9,10 +9,16 @@ import {
 } from '@mui/material';
 
 const OrderReview = () => {
-const [order,setOrder] = useState(JSON.parse(localStorage.getItem("orderDetails")))
+const [orders,setOrders] = useState(JSON.parse(localStorage.getItem("orderDetails")))
+
+
+
 
   return (
-    <Card sx={{ display: 'flex',flexDirection:"column",justifyContent:"center",alignItems:"center", gap: 2, p: 4, mb: 2, boxShadow: 0, borderRadius: 3 }}>
+     <Box sx={{ p: 4 }}>
+  {orders.map((order)=>{
+    return (
+        <Card sx={{ display: 'flex',flexDirection:"column",justifyContent:"center",alignItems:"center", gap: 2, p: 4, mb: 2, boxShadow: 0, borderRadius: 3 }}>
       <CardMedia
         component="img"
         sx={{ width: 250, height: 250, borderRadius: 2 }}
@@ -54,6 +60,9 @@ const [order,setOrder] = useState(JSON.parse(localStorage.getItem("orderDetails"
         </Box>
       </CardContent>
     </Card>
+    )
+  })}
+  </Box>
   );
 };
 
