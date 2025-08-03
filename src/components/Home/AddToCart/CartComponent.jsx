@@ -39,6 +39,8 @@ const QuantityIncrement = async(id)=>{
 
     let res = await axios.post(`http://localhost:3000/api/users/cart/incrementquantity/${userid}/${id}`)
 
+    console.log(res.data);
+
     setHandleRendering((prev)=>!prev)
   }catch(err)
   {
