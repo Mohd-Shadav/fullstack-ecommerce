@@ -158,7 +158,7 @@ React.useEffect(()=>{
 
             let res = await axios.get(`http://localhost:3000/api/users/get-user/${userID}`)
 
-           
+           console.log(res.data)
            
             setOrders(res.data.orders);
 
@@ -289,11 +289,12 @@ React.useEffect(()=>{
       {/* Orders Tab */}
       <TabPanel value={value} index={2}>
         <Typography variant="h6">You Ordered <span style={{color:"red",fontWeight:"600"}}>{orders.length}</span> Orders</Typography>
-       {orders.map((item,idx)=>{
+
+       {orders.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)).map((item,idx)=>{
         return   <MyOrders order={item} key={idx} user={user} idx={idx}/>
        })
-
        }
+
       </TabPanel>
 
       {/* Address Tab */}

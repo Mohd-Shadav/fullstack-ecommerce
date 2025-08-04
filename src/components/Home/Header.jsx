@@ -31,6 +31,8 @@ function Header() {
   const userData = useSelector((state)=>state.userData.value)
   const updationUser = useSelector((state)=>state.userData.isUpdate);
   const filterSubcategory = useSelector((state)=>state.filterDataSlice.value);
+  const [searchProduct,setSearchProduct] = useState(null)
+  const [searchData,setSearchedData] = useState([]);
  
  
   const [filterData,setFilterData] = useState({
@@ -123,6 +125,43 @@ const handleSliderCategories = async (categoryName) => {
 
   }
 
+  const callProducts =async (e)=>{
+    console.log(e.target.value)
+    setSearchProduct(e.target.value)
+    
+    const productname = e.target.value;
+
+    if(productname)
+    {
+ try{
+      let res = await axios.get(`http://localhost:3000/api/products/get-product-by-name/${productname}`);
+
+      console.log(res.data);
+
+      setSearchedData(res.data)
+
+    }catch(err)
+    {
+      alert("error to finding")
+    }
+
+    }else{
+      setSearchProduct(null)
+      setSearchedData([])
+    }
+   
+  }
+
+
+  const handleClickSearchedData = async(id)=>{
+
+
+     navigate(`/productdetails/${id}`);
+     setSearchedData([])
+
+  }
+
+
   useEffect(()=>{
     dispatch(getFilterData(filterData));
     dispatch(getFilterDataUpdationTrigger());
@@ -200,21 +239,35 @@ const handleSliderCategories = async (categoryName) => {
           <img src={Logo} alt="logo" className="" style={{ width: "100px" }} />
         </Link>
 
-        <div className="country&Search-Cont d-flex gap-3">
-          {context.countryList.length > 0 && <CountryDropDown />}
-
+        <div className={styles['main-div-searched-and-data']}>
+         
           <div className={`${styles["searchBar"]} d-flex`}>
             <input
               type="text"
-              name=""
-              id=""
+              name="search"
+              value={searchProduct}
               className={styles["searchInput"]}
               placeholder="Search for products..."
+              onChange={callProducts}
             />
             <span className={styles["searchIcon"]}>
               <FaSearch />
             </span>
           </div>
+        {searchData.length>0 && (
+            <div className={styles["searched-data-div"]}>
+
+            {searchData.map((item)=>{
+              return (
+                <div className={styles['data-div']} onClick={()=>handleClickSearchedData(item._id)}>
+                    <img src={item.images.thumbnail} alt="" />
+                    <h6>{item.name}</h6>
+                </div>
+              )
+            })}
+
+          </div>
+        )}
         </div>
         <div className={styles["userCredentialCont"]}>
           {loggedIn ? (

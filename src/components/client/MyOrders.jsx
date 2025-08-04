@@ -12,6 +12,8 @@ import AvatarGroup from '@mui/material/AvatarGroup';
 
         const fetchProducts = async ()=>{
 
+       
+
     let orderArr = await Promise.all(
   order.orderDetails.product.map(async (item) =>
     await axios.get(`http://localhost:3000/api/products/get-product/${item.productID}`)

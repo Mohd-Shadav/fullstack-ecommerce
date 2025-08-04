@@ -39,7 +39,7 @@ function ProductDetails() {
       }
 
       getProducts();
-    },[])
+    },[productId])
   return (
     <div className={`${styles['main-details-cont']} container mt-3 p-5`}>
       <div className="d-flex gap-5">

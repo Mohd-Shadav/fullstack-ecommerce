@@ -23,7 +23,7 @@ import PaymentSuccess from "./components/Checkout/PaymentSuccess";
 
 function App() {
   // const URL = "https://countriesnow.space/api/v0.1/countries";
-  const URL = "https://wft-geo-db.p.rapidapi.com/v1/geo/countries";
+  // const URL = "https://wft-geo-db.p.rapidapi.com/v1/geo/countries";
 
   const [countryList, setCountryList] = useState([]);
   const loggedIn = useSelector((state)=>state.isLoggedIn.value)
@@ -32,25 +32,9 @@ function App() {
   const [isLoggedIn,setIsLoggedIn] = useState(false);
   const dispatch = useDispatch();
 
-  const getCountries = async () => {
-    try {
-      const response = await axios.get(URL);
 
-        console.log(response.json)
 
-  
-
-      setCountryList(response.data.data || []);
-    } catch (err) {
-      console.log(err);
-    }
-  };
-
-  useEffect(() => {
-    getCountries();
-
-  
-  }, []);
+ 
 
   const [scroller, setScroller] = useState(false);
 
@@ -110,7 +94,7 @@ function App() {
 
   return (
     <BrowserRouter>
-      <CountryDropDownContext.Provider value={{ countryList}}>
+    
 
      <MyContext value={{setIsHeaderFooter,setIsLoggedIn,isLoggedIn}}>
 
@@ -143,7 +127,7 @@ function App() {
      }
 
 </MyContext>
-      </CountryDropDownContext.Provider>
+    
     </BrowserRouter>
   );
 }
