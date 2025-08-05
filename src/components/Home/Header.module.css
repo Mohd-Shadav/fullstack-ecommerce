@@ -75,9 +75,11 @@
   gap: 20px;
 }
 
-.avatar {
-  border: 1px solid black;
+
+.userDiv{
+  text-decoration: none;
 }
+
 
 .wallet {
   text-decoration: none;

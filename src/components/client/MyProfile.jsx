@@ -156,11 +156,15 @@ React.useEffect(()=>{
     const fetchOrders = async ()=>{
         try{
 
-            let res = await axios.get(`http://localhost:3000/api/users/get-user/${userID}`)
+            
 
-           console.log(res.data)
+
+            let res = await axios.get(`http://localhost:3000/api/orders/get-my-orders/${userID}`);
            
-            setOrders(res.data.orders);
+
+        
+           
+            setOrders(res.data);
 
            
 
@@ -199,7 +203,7 @@ React.useEffect(()=>{
   ];
 
   return (
-    <Box sx={{ width: '100%', position: 'relative', minHeight: 600 }}>
+    <Box sx={{ width: '100%', position: 'relative', minHeight: 600}}>
       <AppBar position="static" color="default" elevation={1}>
         <Tabs
           value={value}
@@ -290,10 +294,14 @@ React.useEffect(()=>{
       <TabPanel value={value} index={2}>
         <Typography variant="h6">You Ordered <span style={{color:"red",fontWeight:"600"}}>{orders.length}</span> Orders</Typography>
 
+
+<Box sx={{padding:"1rem 5rem" }}>
        {orders.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)).map((item,idx)=>{
         return   <MyOrders order={item} key={idx} user={user} idx={idx}/>
        })
        }
+
+</Box>
 
       </TabPanel>
 

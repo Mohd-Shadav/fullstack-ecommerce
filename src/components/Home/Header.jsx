@@ -9,6 +9,7 @@ import { FaSearch } from "react-icons/fa";
 import { HiOutlineShoppingBag } from "react-icons/hi2";
 import { IoIosMenu } from "react-icons/io";
 import { RiArrowDropDownLine } from "react-icons/ri";
+import { deepPurple } from '@mui/material/colors';
 
 import { Button, Avatar, Badge } from "@mui/material";
 import CountryDropDown from "./CountryDropDown";
@@ -153,6 +154,35 @@ const handleSliderCategories = async (categoryName) => {
   }
 
 
+  function stringToColor(string) {
+  let hash = 0;
+  let i;
+
+  /* eslint-disable no-bitwise */
+  for (i = 0; i < string.length; i += 1) {
+    hash = string.charCodeAt(i) + ((hash << 5) - hash);
+  }
+
+  let color = '#';
+
+  for (i = 0; i < 3; i += 1) {
+    const value = (hash >> (i * 8)) & 0xff;
+    color += `00${value.toString(16)}`.slice(-2);
+  }
+  /* eslint-enable no-bitwise */
+
+  return color;
+}
+
+function stringAvatar(name) {
+  return {
+    sx: {
+      bgcolor: stringToColor(name),
+    },
+    children: `${name.split(' ')[0][0]}${name.split(' ')[1][0]}`,
+  };
+}
+
   const handleClickSearchedData = async(id)=>{
 
 
@@ -226,6 +256,8 @@ const handleSliderCategories = async (categoryName) => {
   
     getCategories();
 
+   
+
   
   }, [loggedIn]);
 
@@ -273,10 +305,9 @@ const handleSliderCategories = async (categoryName) => {
           {loggedIn ? (
             <Link to={"/myprofile"} className={styles["userDiv"]}>
               <Avatar
-                alt="Remy Sharp"
-                src="https://thumbs.dreamstime.com/b/customer-support-service-agent-headset-flat-vector-icon-design-designs-153069456.jpg"
+                sx={{ bgcolor: deepPurple[500] }}
                 className={styles["avatar"]}
-              />
+              >{userData?.name?.slice(0,1).toUpperCase()}</Avatar>
             </Link>
           ) : (
             <Link to={"/signin"}>
