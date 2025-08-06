@@ -65,7 +65,7 @@ import AvatarGroup from '@mui/material/AvatarGroup';
 </AvatarGroup>
 
                 <div className={styles["product-details-div"]}>
-                    <span style={{color:"gray"}}>order ID: <strong style={{color:"#252525"}}>{order?.orderId}</strong></span>
+                    <span style={{color:"gray",textWrap:"nowrap"}}>order ID: <strong style={{color:"#252525"}}>{order?.orderId}</strong></span>
 
 
  {order.items.length <= 1 ? (
@@ -121,7 +121,7 @@ import AvatarGroup from '@mui/material/AvatarGroup';
     fontWeight: "600",
   }}>{order?.orderStatus}</span>
                     <span style={{backgroundColor:order?.paymentStatus==="paid" ? "#c5fcc5ff":"red",color:"#252525c2",fontWeight:"600"}}>{order?.paymentStatus}</span>
-                    <Button disabled={order.orderStatus==="Cancelled" ? true : false} variant='contained' color='error' onClick={cancelledOrder}>Cancel</Button>
+                    <Button disabled={order.orderStatus==="Cancelled"?  true : order.orderStatus==="Delivered" ?true : false} variant='contained' color='error' onClick={cancelledOrder}>Cancel</Button>
                     
         
 

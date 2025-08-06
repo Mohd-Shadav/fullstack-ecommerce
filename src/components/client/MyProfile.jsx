@@ -1,5 +1,7 @@
 import * as React from 'react';
 import PropTypes from 'prop-types';
+import { Dialog, DialogTitle, DialogContent, DialogActions, TextField } from '@mui/material';
+
 import {
   AppBar, Tabs, Tab, Box, Typography, Paper, Grid, Avatar, IconButton,
   Divider, Button, Fab, Zoom,
@@ -10,6 +12,7 @@ import {
   KeyboardArrowUp as UpIcon,
   Email, Phone, AddLocationAlt,
   Padding,
+  RssFeed,
 } from '@mui/icons-material';
 import EmailIcon from "@mui/icons-material/Email";
 import PhoneIcon from "@mui/icons-material/Phone";
@@ -65,11 +68,18 @@ export default function UserDashboard() {
   const [value, setValue] = React.useState(0);
   const handleChange = (event, newValue) => setValue(newValue);
 
+
   const [user,setUser] = React.useState([]);
   const [orders,setOrders] = React.useState([])
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const userID = localStorage.getItem("userID");
+    const [userChanges,setUserChanges] = React.useState({
+    _id:userID,
+    name:"",
+    email:"",
+    mobile:""
+  })
 
   // Placeholder modals control
   const [openEditModal, setOpenEditModal] = React.useState(false);
@@ -98,6 +108,42 @@ export default function UserDashboard() {
     }
   }
 
+
+  const handleUserDataChanges = (e)=>{
+    
+    let {name,value} = e.target;
+
+      setUserChanges((prev)=>({
+        ...prev,
+        [name]:value
+      }))
+  }
+
+  const handleUserEdit = async ()=> {
+
+    console.log(userChanges)
+
+    let temp = {
+      _id:userID,
+      name:userChanges.name,
+      email:userChanges.email,
+      mobile:userChanges.mobile
+
+    }
+
+    try{
+
+      await axios.put('http://localhost:3000/api/users/update-user',temp);
+
+      
+
+    }catch(err)
+    {
+      alert("failed to edit user")
+    }
+
+    setOpenEditModal(false);
+  }
   // Example User Data
 //   const user = {
 //     name: 'Jane Doe',
@@ -138,6 +184,8 @@ React.useEffect(()=>{
         withCredentials: true,
       });
       setUser(res.data);
+
+      setUserChanges({name:res.data.name,email:res.data.email,mobile:res.data.mobile})
       dispatch(userAllData(res.data));
     } catch (err) {
       console.error("Error fetching user:", err);
@@ -147,7 +195,7 @@ React.useEffect(()=>{
 
   fetchUser();
 
-},[])
+},[openEditModal])
 
 
 
@@ -284,6 +332,21 @@ React.useEffect(()=>{
     </Box>
   </Paper>
 </TabPanel>
+
+<Dialog open={openEditModal} onClose={() => setOpenEditModal(false)}>
+  <DialogTitle>Edit Profile</DialogTitle>
+  <DialogContent>
+    {/* Add form fields here */}
+    <TextField fullWidth margin="dense" label="Name" name='name'  onChange={handleUserDataChanges} value={userChanges.name} />
+    <TextField fullWidth margin="dense" label="Email" name="email"  onChange={handleUserDataChanges} value={userChanges.email} />
+    <TextField fullWidth margin="dense" label="Mobile" name="mobile"  onChange={handleUserDataChanges} value={userChanges.mobile} />
+  </DialogContent>
+  <DialogActions>
+    <Button onClick={() => setOpenEditModal(false)} color="primary">Cancel</Button>
+    <Button onClick={handleUserEdit} color="primary">Save</Button>
+  </DialogActions>
+</Dialog>
+
 
       {/* Cart Tab */}
       <TabPanel value={value} index={1}>
