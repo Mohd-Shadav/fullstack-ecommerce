@@ -25,6 +25,7 @@ function ProductDetails() {
   
     useEffect(()=>{
     context.setIsHeaderFooter(true);
+    window.scrollTo({ top: 0, behavior: "smooth" });
 
       const getProducts =async ()=>{
 

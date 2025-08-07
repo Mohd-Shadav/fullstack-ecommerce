@@ -3,12 +3,9 @@ import HeroesSection from './HeroesSection'
 import Products from './Products'
 import FeaturedProducts from './FeaturedProducts'
 import SaleElectronics from './SaleElectronics'
-import JewellerySection from './JewellerySection'
 
-import { FaAngleUp } from 'react-icons/fa'
-import styles from './Home.module.css'
-import FooterComponent from '../../Footer/FooterComponent'
 import { MyContext } from '../../../store/Context'
+import GrocerySection from './GrocerySection'
 
 
 function Home() {
@@ -17,6 +14,7 @@ function Home() {
 
   useEffect(()=>{
   context.setIsHeaderFooter(true);
+
   },[])
      
   return (
@@ -25,7 +23,7 @@ function Home() {
       <Products/>
       <FeaturedProducts/>
       <SaleElectronics/>
-      <JewellerySection/>
+      <GrocerySection/>
     
 
  

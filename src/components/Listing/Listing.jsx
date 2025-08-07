@@ -15,13 +15,14 @@ import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 
 import NoResultFound from "../NoResultFound/NoResultFound";
+import ReactSkeleton from "../NoResultFound/ReactSkeleton";
 
 function Listing() {
   const context = useContext(MyContext);
   const category = useSelector((state) => state.category.value);
   const filterData = useSelector((state) => state.filterDataSlice?.value);
   const updationFilter = useSelector((state) => state.filterDataSlice.isUpdate);
-  
+  const [loading,setLoading] = useState(true)
 
   const [grid, setGrid] = useState("4x4");
   const [age, setAge] = React.useState(10);
@@ -44,6 +45,8 @@ function Listing() {
 
   const filterProducts = async () => {
     try {
+
+      setLoading(true)
    
       let res = await axios.post(
         `http://localhost:3000/api/products/${category}/get-filterized-data`,
@@ -58,6 +61,8 @@ function Listing() {
       
     } catch (err) {
       alert("Filterization is not being worked");
+    }finally{
+      setLoading(false)
     }
   };
 
@@ -139,7 +144,14 @@ function Listing() {
               styles[`grid-${grid}`]
             }`}
           >
-            {products.length > 0 ? (
+
+            {loading ? (
+              Array.from({length:8}).map((_,idx)=>{
+                return (
+                  <ReactSkeleton/>
+                )
+              })
+            ) : (products.length > 0 ? (
               products.map((item) => (
                 <ProductCard
                   key={item._id || item.id} // use a unique key here
@@ -166,7 +178,7 @@ function Listing() {
               >
                 <NoResultFound />
               </div>
-            )}
+            ))}
           </div>
         </div>
       </div>

@@ -13,17 +13,20 @@ import { Navigation } from 'swiper/modules';
 import { useState } from 'react';
 import { useEffect } from 'react';
 import axios from 'axios';
+import ReactSkeleton from '../../NoResultFound/ReactSkeleton';
 
 
 function FeaturedProducts() {
 
 
     const [getFeatured,setGetFeatured] = useState([]);
+    const [loading,setLoading] = useState(true)
 
 
     const getFetauredProducts = async ()=>{
          
       try{
+        setLoading(true)
 
         let res = await axios.get("http://localhost:3000/api/products/get-featured-products");
 
@@ -32,6 +35,8 @@ function FeaturedProducts() {
       }catch(err){
         alert("Data was not fetched")
 
+      }finally{
+          setLoading(false)
       }
     }
 
@@ -58,14 +63,18 @@ function FeaturedProducts() {
      
         >
         
-        {
-          getFeatured.map((item,idx)=>(
+        {loading ? Array.from({length:5}).map((_,idx)=>{
+   return ( <SwiperSlide key={idx}>
+        <ReactSkeleton />
+      </SwiperSlide>
+   )
+       }) :  (getFeatured.map((item,idx)=>(
                
           <SwiperSlide key={idx}>
             <ProductCard key={idx} product={item} />
           </SwiperSlide>
           ))
-        }
+        )}
 
 
         </Swiper>

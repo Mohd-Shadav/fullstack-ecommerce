@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import styles from './JewellerySection.module.css'
+import styles from './GrocerySection.module.css'
 import ProductCard from './ProductCard'
 // Import Swiper React components
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -11,11 +11,13 @@ import 'swiper/css/navigation';
 import 'swiper/css/effect-fade';
 import { Navigation } from 'swiper/modules';
 import axios from 'axios';
+import ReactSkeleton from '../../NoResultFound/ReactSkeleton';
 
-function JewellerySection() {
+function GrocerySection() {
 
 
   const [products,setProducts] = useState([]);
+  const [loading,setLoading] = useState(true);
 
        useEffect(()=>{
     
@@ -25,9 +27,21 @@ function JewellerySection() {
     
 
     const getProducts =async ()=>{
-     let res = await axios.get(`http://localhost:3000/api/products/get-popular-products/Groceries`);
-    
-     setProducts(res.data);
+
+      try{
+        setLoading(true);
+        let res = await axios.get(`http://localhost:3000/api/products/get-popular-products/Groceries`);
+       
+        setProducts(res.data);
+      }catch(err){
+
+        alert("Error:Failed to load Grocery Section...")
+
+      }finally{
+
+        setLoading(false)
+
+      }
     
     }
 
@@ -51,7 +65,15 @@ function JewellerySection() {
           pagination={{ clickable: true }}
       
         >
-     {products.map((item,idx)=>{
+     {loading ? (
+      Array.from({length:5}).map((_,idx)=>{
+        return (
+             <SwiperSlide key={idx}>
+          <ReactSkeleton/>
+          </SwiperSlide>
+        )
+      })
+     )  : ( products.map((item,idx)=>{
       return (
           
           <SwiperSlide key={idx}>
@@ -59,7 +81,7 @@ function JewellerySection() {
           </SwiperSlide>
 
       )
-     })
+     }))
 
      }
    
@@ -69,4 +91,4 @@ function JewellerySection() {
   )
 }
 
-export default JewellerySection
+export default GrocerySection

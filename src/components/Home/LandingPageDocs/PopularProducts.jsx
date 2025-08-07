@@ -18,6 +18,8 @@ import 'swiper/css/navigation';
 
 import 'swiper/css/effect-fade';
 import { Navigation } from 'swiper/modules';
+import ReactSkeleton from "../../NoResultFound/ReactSkeleton";
+
 
 
 function PopularProducts() {
@@ -27,6 +29,7 @@ function PopularProducts() {
      const [products,setProducts] = useState([])
      const listRef = useRef();
      const [categoryObj,setCategoryObj] = useState([])
+     const [loading,setLoading] = useState(true)
 
    
   
@@ -62,9 +65,20 @@ function PopularProducts() {
     
 
     const getProducts =async ()=>{
-     let res = await axios.get(`http://localhost:3000/api/products/get-popular-products/${activeCategory}`);
+    
+      try{
+        setLoading(true)
+         let res = await axios.get(`http://localhost:3000/api/products/get-popular-products/${activeCategory}`);
     
      setProducts(res.data);
+
+      }catch(err)
+      {
+           alert("Error:Failed to load Products...")
+      }finally{
+        setLoading(false);
+
+      }
     
     }
 
@@ -123,11 +137,16 @@ function PopularProducts() {
           pagination={{ clickable: true }}
   
         >
-       {products.map((item) => (
+       {loading ? Array.from({length:5}).map((_,idx)=>{
+   return ( <SwiperSlide key={idx}>
+        <ReactSkeleton />
+      </SwiperSlide>
+   )
+       }) : (products.map((item) => (
   <SwiperSlide key={item._id || item.id}>
     <ProductCard product={item} />
   </SwiperSlide>
-))}
+)))}
         </Swiper>
       </div>
     </div>

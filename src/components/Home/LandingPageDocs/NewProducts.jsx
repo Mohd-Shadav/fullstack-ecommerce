@@ -4,13 +4,17 @@ import ProductCard from './ProductCard'
 import { useEffect } from 'react'
 import axios from 'axios'
 import { useState } from 'react'
+import ReactSkeleton from '../../NoResultFound/ReactSkeleton'
 
 function NewProducts() {
   const [getNew,setGetNew] = useState([])
+  const [loading,setLoading] = useState(true)
 
   const getNewProducts =async ()=>{
     
     try{
+
+      setLoading(true)
       let res = await axios.get("http://localhost:3000/api/products/get-new-products");
         
       setGetNew(res.data);
@@ -19,6 +23,8 @@ function NewProducts() {
     }catch(err)
     {
       alert("Data was not fetched...")
+    }finally{
+   setLoading(false)
     }
 
   }
@@ -37,11 +43,13 @@ function NewProducts() {
    </div>
 
    <div className={`d-flex flex-wrap gap-7 mx-2 w-full`}>
-       {getNew.map((item,idx)=>{
+       {loading ? Array.from({length:5}).map((_,idx)=>{
+   return <ReactSkeleton key={idx}/>
+       }) : (  getNew.map((item,idx)=>{
           return (
             <ProductCard key={idx}  product={item}/>
           )
-       })}
+       }))}
    </div>
     </div>
   )
