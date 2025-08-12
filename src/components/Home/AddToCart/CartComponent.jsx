@@ -39,7 +39,7 @@ const QuantityIncrement = async(id)=>{
 
     let res = await axios.post(`http://localhost:3000/api/users/cart/incrementquantity/${userid}/${id}`)
 
-    console.log(res.data);
+   
 
     setHandleRendering((prev)=>!prev)
   }catch(err)
@@ -306,7 +306,7 @@ const handleCheckout = ()=>{
             </div>
             <div className="d-flex justify-content-between">
               <span>Estimate For</span>
-              <span>{userrr?.address?.[0].city.toUpperCase()},{userrr?.address?.[0].district.toUpperCase()}</span>
+              <span>{userrr?.address?.[0]?.city?.toUpperCase()},{userrr?.address?.[0]?.district?.toUpperCase()}</span>
             </div>
             <div className="d-flex justify-content-between">
               <span>Total</span>
