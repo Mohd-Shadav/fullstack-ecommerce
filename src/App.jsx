@@ -48,6 +48,8 @@ function App() {
 
   useEffect(() => {
     async function fetchUserFromCookie() {
+
+      console.log("hello from cookie")
     
         const res = await axios.get('http://localhost:3000/api/users/auth', {
           withCredentials: true
