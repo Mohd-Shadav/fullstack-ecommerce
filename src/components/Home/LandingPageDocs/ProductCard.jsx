@@ -7,7 +7,7 @@ import Typography from '@mui/material/Typography';
 import { MdOutlineZoomOutMap } from 'react-icons/md';
 import { CiHeart } from 'react-icons/ci';
 import ProductModal from '../ProductModal/ProductModal';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import axios from 'axios';
 import { getUserDataUpdationTrigger } from '../../../store/reduxSlice';
@@ -17,6 +17,7 @@ function ProductCard({classnameProp,product}) {
      const [open, setOpen] = React.useState(false);
      const[productId,setProductId] = useState(0);
      const user = useSelector((state)=>state.userData.value)
+     const navigate = useNavigate();
 
      const dispatch = useDispatch();
     
@@ -51,14 +52,26 @@ function ProductCard({classnameProp,product}) {
           try{
 
           
-            let res = await axios.post(`http://localhost:3000/api/users/addtocart/${user._id}/${id}`)
+            if(localStorage.getItem("userID"))
+            {
+              let res = await axios.post(`http://localhost:3000/api/users/addtocart/${user._id}/${id}`)
            
             alert(`${res.data.product.name} Added Into Cart Successfully...`)
             dispatch(getUserDataUpdationTrigger());
+            }else{
+              navigate('/signin')
+             
+            }
 
 
           }catch(err){
+             if(localStorage.getItem("userID"))
+             {
+            
             alert("Item was not added...")
+             }else{
+              navigate('/signin')
+             }
 
           }
         }
