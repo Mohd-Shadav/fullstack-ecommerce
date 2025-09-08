@@ -76,7 +76,7 @@ function App() {
 
   useEffect(() => {
 
-   
+   console.log("hii")
     
     const handleScroll = () => {
       if (window.scrollY > 500) {
