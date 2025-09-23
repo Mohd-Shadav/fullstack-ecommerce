@@ -76,7 +76,7 @@ function App() {
 
   useEffect(() => {
 
-
+  console.log("hi")
 
   
     const handleScroll = () => {
